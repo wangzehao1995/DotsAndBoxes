@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/androidTest" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/AI.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Board.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Doublee.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Help.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/MainActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Move.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/SBoard.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Single.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/Sound.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

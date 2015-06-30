@@ -6,6 +6,6 @@
 <h4>单人模式</h4>
 ![](/readme/pic-single.png "单人模式")
 <h4>双人模式</h4>
-![](http://git.oschina.net/uploads/images/2015/0628/013627_0c1aeb26_110923.png "双人模式")
+![](/readme/pic-double.png "双人模式")
 <h4>帮助</h4>
-![](http://git.oschina.net/uploads/images/2015/0628/013635_89c6b3f7_110923.png "帮助")
+![](/readme/pic-help.png "帮助")

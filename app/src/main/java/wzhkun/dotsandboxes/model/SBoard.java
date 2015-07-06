@@ -11,23 +11,9 @@ import android.view.View;
 import wzhkun.dotsandboxes.view.SingleActivity;
 
 @SuppressLint("ClickableViewAccessibility") 
-	public class SBoard extends View {
-	public static int[][] occupied;
-	public static int[][] horizontal;
-	public static int[][] vertical;
+public class SBoard extends View {
 	public static final int HORIZONTAL = 0;
 	public static final int VERTICAL = 1;
-	
-	private AI ai;
-	private SingleActivity activity;
-	
-	public int playernow;
-	private int difficuty;
-
-	private Move move;
-	private Paint paint;
-	private int width;
-	private int hight;
 	private static final float radius = (float) 14 / 824;
 	private static final float start = (float) 6 / 824;
 	private static final float stop = (float) 819 / 824;
@@ -37,6 +23,27 @@ import wzhkun.dotsandboxes.view.SingleActivity;
 	private static final float add4 = (float) 141 / 824;
 	private static final float add5 = (float) 159 / 824;
 	private static final float add6 = (float) 9 / 824;
+	public static int[][] occupied;
+	public static int[][] horizontal;
+	public static int[][] vertical;
+	public int playernow;
+	private AI ai;
+	private SingleActivity activity;
+	private int difficuty;
+	private Move move;
+	private Paint paint;
+	private int width;
+	private int hight;
+
+	public SBoard(Context context, AttributeSet attributeSet) {
+		super(context, attributeSet);
+		paint = new Paint();
+		paint.setAntiAlias(true);
+		horizontal = new int[6][5];
+		vertical = new int[5][6];
+		occupied = new int[5][5];
+
+	}
 
 	public void add(Move move) {
 		int type = move.direction;
@@ -116,21 +123,11 @@ import wzhkun.dotsandboxes.view.SingleActivity;
 				playernow = player;
 			}
 			break;
-			
+
 		}
 		activity.updateState();
-		
 
-	}
 
-	public SBoard(Context context, AttributeSet attributeSet) {
-		super(context, attributeSet);
-		paint = new Paint();
-		paint.setAntiAlias(true);
-		horizontal = new int[6][5];
-		vertical = new int[5][6];
-		occupied = new int[5][5];
-		
 	}
 
 	@Override

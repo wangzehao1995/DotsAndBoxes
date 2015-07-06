@@ -16,240 +16,6 @@ public class AI {
 	private HashMap<Move, Integer> badMoveValue;
 	private HashMap<Move, Integer> goodMoveType;
 
-	private static class Box {
-		boolean left;
-		boolean top;
-		boolean right;
-		boolean bottom;
-		boolean ocpd;
-
-		Box(boolean l, boolean t, boolean r, boolean b) {
-			this.left = l;
-			this.top = t;
-			this.right = r;
-			this.bottom = b;
-			if (l && t && r && b)
-				this.ocpd = true;
-			else
-				this.ocpd = false;
-		}
-
-		int contain() {
-			int counter = 0;
-			if (this.left)
-				counter++;
-			if (this.right)
-				counter++;
-			if (this.top)
-				counter++;
-			if (this.bottom)
-				counter++;
-			return counter;
-		}
-
-	}
-
-	class VBoard {
-		boolean[][] horizontal;
-		boolean[][] vertical;
-		boolean[][] occupied;
-		private Box[][] box;
-
-		boolean keepgoing;
-
-		VBoard(boolean[][] h, boolean[][] v) {
-			horizontal = new boolean[6][5];
-			vertical = new boolean[5][6];
-			occupied = new boolean[5][5];
-			box = new Box[5][5];
-			for (int i = 0; i < 6; i++) {
-				for (int j = 0; j < 5; j++) {
-					horizontal[i][j] = h[i][j];
-					vertical[j][i] = v[j][i];
-				}
-			}
-
-		}
-
-		void ini() {
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					box[i][j] = new Box(vertical[i][j], horizontal[i][j],
-							vertical[i][j + 1], horizontal[i + 1][j]);
-					if (box[i][j].ocpd)
-						occupied[i][j] = true;
-				}
-			}
-		}
-
-		void add(Move move) {
-			int type = move.direction;
-			int a = move.a;
-			int b = move.b;
-			keepgoing = false;
-
-			switch (type) {
-			case 0:
-				if (!horizontal[a][b]) {
-					horizontal[a][b] = true;
-					if (a == 0) {
-						if (horizontal[a + 1][b] && vertical[a][b]
-								&& vertical[a][b + 1]) {
-							occupied[a][b] = true;
-							keepgoing = true;
-						}
-					} else if (a == 5) {
-						if (horizontal[a - 1][b] && vertical[a - 1][b]
-								&& vertical[a - 1][b + 1]) {
-							occupied[a - 1][b] = true;
-							keepgoing = true;
-						}
-					} else {
-						if (horizontal[a + 1][b] && vertical[a][b]
-								&& vertical[a][b + 1]) {
-							occupied[a][b] = true;
-							keepgoing = true;
-						}
-						if (horizontal[a - 1][b] && vertical[a - 1][b]
-								&& vertical[a - 1][b + 1]) {
-							occupied[a - 1][b] = true;
-							keepgoing = true;
-						}
-					}
-				} else {
-					keepgoing = true;
-				}
-				break;
-			case 1:
-				if (!vertical[a][b]) {
-					vertical[a][b] = true;
-					if (b == 0) {
-						if (vertical[a][b + 1] && horizontal[a][b]
-								&& horizontal[a + 1][b]) {
-							occupied[a][b] = true;
-							keepgoing = true;
-						}
-					} else if (b == 5) {
-						if (vertical[a][b - 1] && horizontal[a][b - 1]
-								&& horizontal[a + 1][b - 1]) {
-							occupied[a][b - 1] = true;
-							keepgoing = true;
-						}
-					} else {
-						if (vertical[a][b + 1] && horizontal[a][b]
-								&& horizontal[a + 1][b]) {
-							occupied[a][b] = true;
-							keepgoing = true;
-						}
-						if (vertical[a][b - 1] && horizontal[a][b - 1]
-								&& horizontal[a + 1][b - 1]) {
-							occupied[a][b - 1] = true;
-							keepgoing = true;
-						}
-					}
-				} else {
-					keepgoing = true;
-				}
-				break;
-			}
-		}
-
-		int getOccupiedNumber() {
-			int counter = 0;
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					if (occupied[i][j])
-						counter++;
-				}
-			}
-			return counter;
-		}
-
-		int getBadMoveValue(Move move) {
-			int start, end;
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
-			else
-				this.vertical[move.a][move.b] = true;
-			AI ai = new AI(0);
-			ini();
-			start = this.getOccupiedNumber();
-			keepgoing = true;
-			while (keepgoing) {
-				add(ai.move(this));
-				if (this.getOccupiedNumber() == 25)
-					break;
-			}
-			end = this.getOccupiedNumber();
-			return (end - start);
-		}
-
-		int getGoodMoveValue(Move move) {
-			int start, end;
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
-			else
-				this.vertical[move.a][move.b] = true;
-			AI ai = new AI(0);
-			ini();
-			start = this.getOccupiedNumber();
-			keepgoing = true;
-			while (keepgoing) {
-				add(ai.move(this));
-				if (this.getOccupiedNumber() == 25)
-					break;
-			}
-			end = this.getOccupiedNumber() + 1;
-			return (end - start);
-		}
-
-		int getCanWinValue(Move move) {
-			ini();
-			int ocpdAlready = getOccupiedNumber();
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
-			else
-				this.vertical[move.a][move.b] = true;
-			int He = 0;
-			int Me = 0;	
-			ini();
-			Me = getOccupiedNumber() - ocpdAlready;
-			AI ai = new AI(2);
-			int playernow;
-			if (Me == 1)
-				playernow = 0;
-			else
-				playernow = 1;
-			
-			while (this.getOccupiedNumber() != 25) {
-				if (playernow == 0) {
-					int temp = getOccupiedNumber();
-					keepgoing = true;
-					while (keepgoing) {
-						add(ai.move(this));
-						if (this.getOccupiedNumber() == 25)
-							break;
-					}
-					temp = getOccupiedNumber() - temp;
-					Me = Me + temp;
-					playernow=1;
-				} else {
-					int temp = getOccupiedNumber();
-					keepgoing = true;
-					while (keepgoing) {
-						add(ai.move(this));
-						if (this.getOccupiedNumber() == 25)
-							break;
-					}
-					temp = getOccupiedNumber() - temp;
-					He = He + temp;
-					playernow=0;
-				}
-			}
-			return Me-He;
-		}
-	}
-
 	public AI(int difficuty) {
 		this.difficuty = difficuty;
 		horizontal = new boolean[6][5];
@@ -899,6 +665,239 @@ public class AI {
 
 			}
 
+		}
+	}
+
+	private static class Box {
+		boolean left;
+		boolean top;
+		boolean right;
+		boolean bottom;
+		boolean ocpd;
+
+		Box(boolean l, boolean t, boolean r, boolean b) {
+			this.left = l;
+			this.top = t;
+			this.right = r;
+			this.bottom = b;
+			if (l && t && r && b)
+				this.ocpd = true;
+			else
+				this.ocpd = false;
+		}
+
+		int contain() {
+			int counter = 0;
+			if (this.left)
+				counter++;
+			if (this.right)
+				counter++;
+			if (this.top)
+				counter++;
+			if (this.bottom)
+				counter++;
+			return counter;
+		}
+
+	}
+
+	class VBoard {
+		boolean[][] horizontal;
+		boolean[][] vertical;
+		boolean[][] occupied;
+		boolean keepgoing;
+		private Box[][] box;
+
+		VBoard(boolean[][] h, boolean[][] v) {
+			horizontal = new boolean[6][5];
+			vertical = new boolean[5][6];
+			occupied = new boolean[5][5];
+			box = new Box[5][5];
+			for (int i = 0; i < 6; i++) {
+				for (int j = 0; j < 5; j++) {
+					horizontal[i][j] = h[i][j];
+					vertical[j][i] = v[j][i];
+				}
+			}
+
+		}
+
+		void ini() {
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					box[i][j] = new Box(vertical[i][j], horizontal[i][j],
+							vertical[i][j + 1], horizontal[i + 1][j]);
+					if (box[i][j].ocpd)
+						occupied[i][j] = true;
+				}
+			}
+		}
+
+		void add(Move move) {
+			int type = move.direction;
+			int a = move.a;
+			int b = move.b;
+			keepgoing = false;
+
+			switch (type) {
+			case 0:
+				if (!horizontal[a][b]) {
+					horizontal[a][b] = true;
+					if (a == 0) {
+						if (horizontal[a + 1][b] && vertical[a][b]
+								&& vertical[a][b + 1]) {
+							occupied[a][b] = true;
+							keepgoing = true;
+						}
+					} else if (a == 5) {
+						if (horizontal[a - 1][b] && vertical[a - 1][b]
+								&& vertical[a - 1][b + 1]) {
+							occupied[a - 1][b] = true;
+							keepgoing = true;
+						}
+					} else {
+						if (horizontal[a + 1][b] && vertical[a][b]
+								&& vertical[a][b + 1]) {
+							occupied[a][b] = true;
+							keepgoing = true;
+						}
+						if (horizontal[a - 1][b] && vertical[a - 1][b]
+								&& vertical[a - 1][b + 1]) {
+							occupied[a - 1][b] = true;
+							keepgoing = true;
+						}
+					}
+				} else {
+					keepgoing = true;
+				}
+				break;
+			case 1:
+				if (!vertical[a][b]) {
+					vertical[a][b] = true;
+					if (b == 0) {
+						if (vertical[a][b + 1] && horizontal[a][b]
+								&& horizontal[a + 1][b]) {
+							occupied[a][b] = true;
+							keepgoing = true;
+						}
+					} else if (b == 5) {
+						if (vertical[a][b - 1] && horizontal[a][b - 1]
+								&& horizontal[a + 1][b - 1]) {
+							occupied[a][b - 1] = true;
+							keepgoing = true;
+						}
+					} else {
+						if (vertical[a][b + 1] && horizontal[a][b]
+								&& horizontal[a + 1][b]) {
+							occupied[a][b] = true;
+							keepgoing = true;
+						}
+						if (vertical[a][b - 1] && horizontal[a][b - 1]
+								&& horizontal[a + 1][b - 1]) {
+							occupied[a][b - 1] = true;
+							keepgoing = true;
+						}
+					}
+				} else {
+					keepgoing = true;
+				}
+				break;
+			}
+		}
+
+		int getOccupiedNumber() {
+			int counter = 0;
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (occupied[i][j])
+						counter++;
+				}
+			}
+			return counter;
+		}
+
+		int getBadMoveValue(Move move) {
+			int start, end;
+			if (move.direction == 0)
+				this.horizontal[move.a][move.b] = true;
+			else
+				this.vertical[move.a][move.b] = true;
+			AI ai = new AI(0);
+			ini();
+			start = this.getOccupiedNumber();
+			keepgoing = true;
+			while (keepgoing) {
+				add(ai.move(this));
+				if (this.getOccupiedNumber() == 25)
+					break;
+			}
+			end = this.getOccupiedNumber();
+			return (end - start);
+		}
+
+		int getGoodMoveValue(Move move) {
+			int start, end;
+			if (move.direction == 0)
+				this.horizontal[move.a][move.b] = true;
+			else
+				this.vertical[move.a][move.b] = true;
+			AI ai = new AI(0);
+			ini();
+			start = this.getOccupiedNumber();
+			keepgoing = true;
+			while (keepgoing) {
+				add(ai.move(this));
+				if (this.getOccupiedNumber() == 25)
+					break;
+			}
+			end = this.getOccupiedNumber() + 1;
+			return (end - start);
+		}
+
+		int getCanWinValue(Move move) {
+			ini();
+			int ocpdAlready = getOccupiedNumber();
+			if (move.direction == 0)
+				this.horizontal[move.a][move.b] = true;
+			else
+				this.vertical[move.a][move.b] = true;
+			int He = 0;
+			int Me = 0;
+			ini();
+			Me = getOccupiedNumber() - ocpdAlready;
+			AI ai = new AI(2);
+			int playernow;
+			if (Me == 1)
+				playernow = 0;
+			else
+				playernow = 1;
+
+			while (this.getOccupiedNumber() != 25) {
+				if (playernow == 0) {
+					int temp = getOccupiedNumber();
+					keepgoing = true;
+					while (keepgoing) {
+						add(ai.move(this));
+						if (this.getOccupiedNumber() == 25)
+							break;
+					}
+					temp = getOccupiedNumber() - temp;
+					Me = Me + temp;
+					playernow=1;
+				} else {
+					int temp = getOccupiedNumber();
+					keepgoing = true;
+					while (keepgoing) {
+						add(ai.move(this));
+						if (this.getOccupiedNumber() == 25)
+							break;
+					}
+					temp = getOccupiedNumber() - temp;
+					He = He + temp;
+					playernow=0;
+				}
+			}
+			return Me-He;
 		}
 	}
 

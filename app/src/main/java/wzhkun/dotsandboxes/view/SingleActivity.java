@@ -24,19 +24,17 @@ import wzhkun.dotsandboxes.model.SBoard;
 public class SingleActivity extends Activity {
 	public static int mover;
 	public static int difficuty = 0;
+	boolean music,touch;
+	SoundPool soundpool;
+	MediaPlayer player;
+	TextView player1name, player2name, player1state, player2state,
+			player1occupying, player2occupying;
+	ImageView a, p1, p2;
 	private int occupiedBoxes;
 	private int winner = 0;
 	private Intent mainActivity;
 	private SingleActivity myself;
-	
-	boolean music,touch;
-	SoundPool soundpool;
-	MediaPlayer player;
-
 	private SBoard board;
-	TextView player1name, player2name, player1state, player2state,
-			player1occupying, player2occupying;
-	ImageView a, p1, p2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

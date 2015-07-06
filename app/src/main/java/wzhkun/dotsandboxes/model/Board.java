@@ -11,23 +11,9 @@ import android.view.View;
 import wzhkun.dotsandboxes.view.DoubleActivity;
 
 @SuppressLint("ClickableViewAccessibility") 
-	public class Board extends View {
-	public int[][] occupied;
-	public int[][] horizontal;
-	public int[][] vertical;
+public class Board extends View {
 	public static final int HORIZONTAL = 0;
 	public static final int VERTICAL = 1;
-	
-
-	private DoubleActivity activity;
-
-	public int playernow;
-
-
-	private Move move;
-	private Paint paint;
-	private int width;
-	private int hight;
 	private static final float radius = (float) 14 / 824;
 	private static final float start = (float) 6 / 824;
 	private static final float stop = (float) 819 / 824;
@@ -37,6 +23,25 @@ import wzhkun.dotsandboxes.view.DoubleActivity;
 	private static final float add4 = (float) 141 / 824;
 	private static final float add5 = (float) 159 / 824;
 	private static final float add6 = (float) 9 / 824;
+	public int[][] occupied;
+	public int[][] horizontal;
+	public int[][] vertical;
+	public int playernow;
+	private DoubleActivity activity;
+	private Move move;
+	private Paint paint;
+	private int width;
+	private int hight;
+
+	public Board(Context context, AttributeSet attributeSet) {
+		super(context, attributeSet);
+		paint = new Paint();
+		paint.setAntiAlias(true);
+		horizontal = new int[6][5];
+		vertical = new int[5][6];
+		occupied = new int[5][5];
+
+	}
 
 	public void add(Move move) {
 		int type = move.direction;
@@ -110,21 +115,11 @@ import wzhkun.dotsandboxes.view.DoubleActivity;
 				playernow = player;
 			}
 			break;
-			
+
 		}
 		activity.updateState();
 		invalidate();
 
-	}
-
-	public Board(Context context, AttributeSet attributeSet) {
-		super(context, attributeSet);
-		paint = new Paint();
-		paint.setAntiAlias(true);
-		horizontal = new int[6][5];
-		vertical = new int[5][6];
-		occupied = new int[5][5];
-		
 	}
 
 	@Override

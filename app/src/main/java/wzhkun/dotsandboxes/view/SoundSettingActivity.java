@@ -18,13 +18,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
 public class SoundSettingActivity extends Activity {
-	private Intent mainActivity;
 	static boolean music;
 	static boolean touch;
 	static ToggleButton musicSwitch;
 	static ToggleButton touchSwitch;
+	private Intent mainActivity;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

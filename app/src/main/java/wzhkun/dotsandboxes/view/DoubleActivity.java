@@ -26,16 +26,15 @@ public class DoubleActivity extends Activity {
 
 	public static int mover;
 	private static DoubleActivity myself;
+	TextView player1state, player2state, player1occupying, player2occupying;
+	ImageView a;
+	boolean music,touch;
+	SoundPool soundpool;
+	MediaPlayer player;
 	private int occupiedBoxes;
 	private int winner = 0;
 	private Intent mainActivity;
 	private Board board;
-	TextView player1state, player2state, player1occupying, player2occupying;
-	ImageView a;
-	
-	boolean music,touch;
-	SoundPool soundpool;
-	MediaPlayer player;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

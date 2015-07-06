@@ -1,11 +1,11 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
 public class AI {
-	int difficuty;
+	private int difficuty;
 	private boolean[][] horizontal;
 	private boolean[][] vertical;
 	private Box[][] box;
@@ -16,7 +16,7 @@ public class AI {
 	private HashMap<Move, Integer> badMoveValue;
 	private HashMap<Move, Integer> goodMoveType;
 
-	class Box {
+	private static class Box {
 		boolean left;
 		boolean top;
 		boolean right;
@@ -250,7 +250,7 @@ public class AI {
 		}
 	}
 
-	AI(int difficuty) {
+	public AI(int difficuty) {
 		this.difficuty = difficuty;
 		horizontal = new boolean[6][5];
 		vertical = new boolean[5][6];

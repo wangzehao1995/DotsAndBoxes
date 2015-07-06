@@ -1,4 +1,4 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.view;
 
 import wzhkun.dotsandboxes.R;
 
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
-public class Help extends Activity {
+public class HelpActivity extends Activity {
 	private Intent mainActivity;
 
 

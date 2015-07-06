@@ -1,9 +1,7 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.view;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-
-import wzhkun.dotsandboxes.R;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,11 +18,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Doublee extends Activity {
+import wzhkun.dotsandboxes.R;
+import wzhkun.dotsandboxes.model.Board;
+
+public class DoubleActivity extends Activity {
 	
 
 	public static int mover;
-	private static Doublee myself;
+	private static DoubleActivity myself;
 	private int occupiedBoxes;
 	private int winner = 0;
 	private Intent mainActivity;
@@ -238,7 +239,7 @@ public class Doublee extends Activity {
 
 	}
 	
-	void touch(){
+	public void touch(){
 		if(touch)
 		soundpool.play(1, (float)0.8, (float)0.8, 0, 0, 1);
 	}

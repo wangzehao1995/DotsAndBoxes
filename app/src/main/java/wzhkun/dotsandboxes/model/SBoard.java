@@ -1,4 +1,4 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import wzhkun.dotsandboxes.view.SingleActivity;
 
 @SuppressLint("ClickableViewAccessibility") 
 	public class SBoard extends View {
@@ -17,7 +19,7 @@ import android.view.View;
 	public static final int VERTICAL = 1;
 	
 	private AI ai;
-	private Single activity;
+	private SingleActivity activity;
 	
 	public int playernow;
 	private int difficuty;
@@ -295,9 +297,9 @@ import android.view.View;
 		return super.onTouchEvent(event);
 	}
 
-	public void startGame(Single temp) {
-		playernow = Single.mover;
-		difficuty=Single.difficuty;
+	public void startGame(SingleActivity temp) {
+		playernow = SingleActivity.mover;
+		difficuty= SingleActivity.difficuty;
 		invalidate();
 		postInvalidate();
 		activity = temp;

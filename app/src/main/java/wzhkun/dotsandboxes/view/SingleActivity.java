@@ -1,9 +1,7 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.view;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-
-import wzhkun.dotsandboxes.R;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,13 +18,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-public class Single extends Activity {
+import wzhkun.dotsandboxes.R;
+import wzhkun.dotsandboxes.model.SBoard;
+
+public class SingleActivity extends Activity {
 	public static int mover;
 	public static int difficuty = 0;
 	private int occupiedBoxes;
 	private int winner = 0;
 	private Intent mainActivity;
-	private Single myself;
+	private SingleActivity myself;
 	
 	boolean music,touch;
 	SoundPool soundpool;
@@ -259,7 +260,7 @@ public class Single extends Activity {
 	}
 
 	public void setDifficuty(int difficuty) {
-		Single.difficuty = difficuty;
+		SingleActivity.difficuty = difficuty;
 	}
 
 	public void start(int difficuty) {
@@ -343,7 +344,7 @@ public class Single extends Activity {
 		}
 	}
 	
-	void touch(){
+	public void touch(){
 		if(touch)
 		soundpool.play(1, (float)0.8, (float)0.8, 0, 0, 1);
 	}

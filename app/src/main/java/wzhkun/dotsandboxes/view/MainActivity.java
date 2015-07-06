@@ -1,6 +1,4 @@
-package wzhkun.dotsandboxes;
-
-import wzhkun.dotsandboxes.R;
+package wzhkun.dotsandboxes.view;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -8,6 +6,8 @@ import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+
+import wzhkun.dotsandboxes.R;
 
 public class MainActivity extends Activity {
 
@@ -17,10 +17,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 
-		final Intent doubleee=new Intent(this,Doublee.class);
-		final Intent helpp=new Intent(this,Help.class);
-		final Intent singlee=new Intent(this,Single.class);
-		final Intent sound=new Intent(this,Sound.class);
+		final Intent doubleee=new Intent(this,DoubleActivity.class);
+		final Intent helpp=new Intent(this,HelpActivity.class);
+		final Intent singlee=new Intent(this,SingleActivity.class);
+		final Intent sound=new Intent(this,SoundSettingActivity.class);
 		ImageButton single=(ImageButton)findViewById(R.id.imageButton2);
 		ImageButton doublee=(ImageButton)findViewById(R.id.imageButton3);
 		ImageButton help=(ImageButton)findViewById(R.id.imageButton6);

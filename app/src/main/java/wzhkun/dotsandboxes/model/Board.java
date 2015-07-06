@@ -1,4 +1,4 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import wzhkun.dotsandboxes.view.DoubleActivity;
 
 @SuppressLint("ClickableViewAccessibility") 
 	public class Board extends View {
@@ -17,7 +19,7 @@ import android.view.View;
 	public static final int VERTICAL = 1;
 	
 
-	private Doublee activity;
+	private DoubleActivity activity;
 
 	public int playernow;
 
@@ -278,8 +280,8 @@ import android.view.View;
 		return super.onTouchEvent(event);
 	}
 
-	public void startGame(Doublee temp) {
-		playernow = Doublee.mover;
+	public void startGame(DoubleActivity temp) {
+		playernow = DoubleActivity.mover;
 		invalidate();
 		postInvalidate();
 		activity = temp;

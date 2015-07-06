@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Single" >
 
-    <wzhkun.dotsandboxes.SBoard
+    <wzhkun.dotsandboxes.model.SBoard
         android:id="@+id/sview1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

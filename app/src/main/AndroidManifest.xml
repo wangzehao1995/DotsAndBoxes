@@ -8,7 +8,7 @@
         android:theme="@android:style/Theme.Light.NoTitleBar"
         >
         <activity
-            android:name="wzhkun.dotsandboxes.MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -18,22 +18,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="wzhkun.dotsandboxes.Doublee"
+            android:name=".view.DoubleActivity"
             android:label="@string/title_activity_board"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="wzhkun.dotsandboxes.Help"
+            android:name=".view.HelpActivity"
             android:label="@string/title_activity_help"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="wzhkun.dotsandboxes.Single"
+            android:name=".view.SingleActivity"
             android:label="@string/title_activity_single"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="wzhkun.dotsandboxes.Sound"
+            android:name=".view.SoundSettingActivity"
             android:label="@string/title_activity_sound"
             android:screenOrientation="portrait" >
         </activity>

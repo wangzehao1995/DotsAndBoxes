@@ -1,4 +1,4 @@
-package wzhkun.dotsandboxes;
+package wzhkun.dotsandboxes.view;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-public class Sound extends Activity {
+public class SoundSettingActivity extends Activity {
 	private Intent mainActivity;
 	static boolean music;
 	static boolean touch;

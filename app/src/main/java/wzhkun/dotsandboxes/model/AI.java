@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class AI {
-	private int difficuty;
+	private int difficulty;
 	private boolean[][] horizontal;
 	private boolean[][] vertical;
 	private Box[][] box;
@@ -16,8 +16,8 @@ public class AI {
 	private HashMap<Move, Integer> badMoveValue;
 	private HashMap<Move, Integer> goodMoveType;
 
-	public AI(int difficuty) {
-		this.difficuty = difficuty;
+	public AI(int difficulty) {
+		this.difficulty = difficulty;
 		horizontal = new boolean[6][5];
 		vertical = new boolean[5][6];
 		box = new Box[5][5];
@@ -36,11 +36,11 @@ public class AI {
 		initialiseGoodMove();
 		initialiseBadMove();
 
-		if (difficuty == 1) {
+		if (difficulty == 1) {
 			return normal();
-		} else if (difficuty == 2) {
+		} else if (difficulty == 2) {
 			return hard();
-		} else if (difficuty == 3) {
+		} else if (difficulty == 3) {
 			return ultra();
 		} else
 			return random();
@@ -63,11 +63,11 @@ public class AI {
 		initialiseGoodMove();
 		initialiseBadMove();
 
-		if (difficuty == 1) {
+		if (difficulty == 1) {
 			return normal();
-		} else if (difficuty == 2) {
+		} else if (difficulty == 2) {
 			return hard();
-		} else if (difficuty == 3) {
+		} else if (difficulty == 3) {
 			return ultra();
 		} else
 			return random();

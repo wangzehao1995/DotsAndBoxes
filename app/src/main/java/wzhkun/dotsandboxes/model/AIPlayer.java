@@ -4,37 +4,39 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class AI {
+public class AIPlayer implements Player{
 	private int difficulty;
 	private boolean[][] horizontal;
 	private boolean[][] vertical;
 	private Box[][] box;
-	private Vector<Move> safeMove;
-	private Vector<Move> goodMove;
-	private Vector<Move> badMove;
-	private HashMap<Move, Integer> goodMoveValue;
-	private HashMap<Move, Integer> badMoveValue;
-	private HashMap<Move, Integer> goodMoveType;
+	private Vector<Line> safeLine;
+	private Vector<Line> goodLine;
+	private Vector<Line> badLine;
+	private HashMap<Line, Integer> goodLineValue;
+	private HashMap<Line, Integer> badLineValue;
+	private HashMap<Line, Integer> goodLineType;
+	private Game game;
 
-	public AI(int difficulty) {
+	public AIPlayer(int difficulty, Game game) {
 		this.difficulty = difficulty;
+		this.game = game;
 		horizontal = new boolean[6][5];
 		vertical = new boolean[5][6];
 		box = new Box[5][5];
-		safeMove = new Vector<Move>();
-		goodMove = new Vector<Move>();
-		badMove = new Vector<Move>();
-		badMoveValue = new HashMap<Move, Integer>();
-		goodMoveValue = new HashMap<Move, Integer>();
-		goodMoveType = new HashMap<Move, Integer>();
+		safeLine = new Vector<Line>();
+		goodLine = new Vector<Line>();
+		badLine = new Vector<Line>();
+		badLineValue = new HashMap<Line, Integer>();
+		goodLineValue = new HashMap<Line, Integer>();
+		goodLineType = new HashMap<Line, Integer>();
 
 	}
 
-	public Move move() {
+	public Line move() {
 		initialiseBoard();
-		initialiseSafeMove();
-		initialiseGoodMove();
-		initialiseBadMove();
+		initialiseSafeLine();
+		initialiseGoodLine();
+		initialiseBadLine();
 
 		if (difficulty == 1) {
 			return normal();
@@ -46,7 +48,7 @@ public class AI {
 			return random();
 	}
 
-	private Move move(VBoard vboard) {
+	private Line Line(VBoard vboard) {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
 				horizontal[i][j] = vboard.horizontal[i][j];
@@ -59,9 +61,9 @@ public class AI {
 						vertical[i][j + 1], horizontal[i + 1][j]);
 			}
 		}
-		initialiseSafeMove();
-		initialiseGoodMove();
-		initialiseBadMove();
+		initialiseSafeLine();
+		initialiseGoodLine();
+		initialiseBadLine();
 
 		if (difficulty == 1) {
 			return normal();
@@ -73,71 +75,71 @@ public class AI {
 			return random();
 	}
 
-	private Move normal() {
-		if (goodMove.size() != 0)
-			return goodMove.get((int) ((goodMove.size()) * Math.random()));
-		if (safeMove.size() != 0)
-			return safeMove.get((int) ((safeMove.size()) * Math.random()));
+	private Line normal() {
+		if (goodLine.size() != 0)
+			return goodLine.get((int) ((goodLine.size()) * Math.random()));
+		if (safeLine.size() != 0)
+			return safeLine.get((int) ((safeLine.size()) * Math.random()));
 		else {
-			Move min = null;
+			Line min = null;
 			int minValue = 26;
-			initialiseBadMoveValue();
-			for (Move move : badMove) {
-				if (badMoveValue.get(move) < minValue) {
-					min = move;
-					minValue = badMoveValue.get(move);
+			initialiseBadLineValue();
+			for (Line Line : badLine) {
+				if (badLineValue.get(Line) < minValue) {
+					min = Line;
+					minValue = badLineValue.get(Line);
 				}
 			}
 			return min;
 		}
 	}
 
-	private Move hard() {
-		if (safeMove.size() != 0) {
-			if (goodMove.size() != 0)
-				return goodMove.get((int) ((goodMove.size()) * Math.random()));
+	private Line hard() {
+		if (safeLine.size() != 0) {
+			if (goodLine.size() != 0)
+				return goodLine.get((int) ((goodLine.size()) * Math.random()));
 			else
-				return safeMove.get((int) ((safeMove.size()) * Math.random()));
-		} else if (goodMove.size() != 0) {
-			if (badMove.size() == 0)
-				return goodMove.get((int) ((goodMove.size()) * Math.random()));
-			initialiseGoodMoveValue();
-			initialiseBadMoveValue();
+				return safeLine.get((int) ((safeLine.size()) * Math.random()));
+		} else if (goodLine.size() != 0) {
+			if (badLine.size() == 0)
+				return goodLine.get((int) ((goodLine.size()) * Math.random()));
+			initialiseGoodLineValue();
+			initialiseBadLineValue();
 
-			ArrayList<Move> bad = new ArrayList<Move>();
-			ArrayList<Move> bad2 = new ArrayList<Move>();
-			ArrayList<Move> good = new ArrayList<Move>();
-			ArrayList<Move> good2 = new ArrayList<Move>();
+			ArrayList<Line> bad = new ArrayList<Line>();
+			ArrayList<Line> bad2 = new ArrayList<Line>();
+			ArrayList<Line> good = new ArrayList<Line>();
+			ArrayList<Line> good2 = new ArrayList<Line>();
 			int badValue = 26;
 			int bad2Value = 26;
 			int goodValue = 0;
 			int goodValue2 = 0;
-			for (Move move : badMove) {
-				if (badMoveValue.get(move) < badValue) {
+			for (Line Line : badLine) {
+				if (badLineValue.get(Line) < badValue) {
 					bad2.clear();
-					for (Move m : bad) {
+					for (Line m : bad) {
 						bad2.add(m);
 					}
 					bad2Value = badValue;
 					bad.clear();
-					bad.add(move);
-					badValue = badMoveValue.get(move);
-				} else if (badMoveValue.get(move) == badValue) {
-					bad.add(move);
+					bad.add(Line);
+					badValue = badLineValue.get(Line);
+				} else if (badLineValue.get(Line) == badValue) {
+					bad.add(Line);
 				}
 			}
-			for (Move move : goodMove) {
-				if (goodMoveValue.get(move) > goodValue) {
+			for (Line Line : goodLine) {
+				if (goodLineValue.get(Line) > goodValue) {
 					good2.clear();
-					for (Move m : good) {
+					for (Line m : good) {
 						good2.add(m);
 					}
 					goodValue2 = goodValue;
 					good.clear();
-					good.add(move);
-					goodValue = goodMoveValue.get(move);
-				} else if (goodMoveValue.get(move) == goodValue) {
-					good.add(move);
+					good.add(Line);
+					goodValue = goodLineValue.get(Line);
+				} else if (goodLineValue.get(Line) == goodValue) {
+					good.add(Line);
 				}
 			}
 
@@ -146,10 +148,10 @@ public class AI {
 				if (goodValue2 > 2) {
 					return good2.get((int) ((good2.size()) * Math.random()));
 				}
-				initialiseGoodMoveType();
-				for (Move move : good) {
-					if (goodMoveType.get(move) == 2) {
-						return move;
+				initialiseGoodLineType();
+				for (Line Line : good) {
+					if (goodLineType.get(Line) == 2) {
+						return Line;
 					}
 				}
 				return bad.get(0);
@@ -157,13 +159,13 @@ public class AI {
 				return good.get((int) ((good.size()) * Math.random()));
 
 		} else {
-			Move min = null;
+			Line min = null;
 			int minValue = 26;
-			initialiseBadMoveValue();
-			for (Move move : badMove) {
-				if (badMoveValue.get(move) < minValue) {
-					min = move;
-					minValue = badMoveValue.get(move);
+			initialiseBadLineValue();
+			for (Line Line : badLine) {
+				if (badLineValue.get(Line) < minValue) {
+					min = Line;
+					minValue = badLineValue.get(Line);
 				}
 			}
 			return min;
@@ -171,51 +173,51 @@ public class AI {
 
 	}
 
-	private Move ultra() {if (safeMove.size() != 0) {
-		if (goodMove.size() != 0)
-			return goodMove.get((int) ((goodMove.size()) * Math.random()));
+	private Line ultra() {if (safeLine.size() != 0) {
+		if (goodLine.size() != 0)
+			return goodLine.get((int) ((goodLine.size()) * Math.random()));
 		else
-			return safeMove.get((int) ((safeMove.size()) * Math.random()));
-	} else if (goodMove.size() != 0) {
-		if (badMove.size() == 0)
-			return goodMove.get((int) ((goodMove.size()) * Math.random()));
-		initialiseGoodMoveValue();
-		initialiseBadMoveValue();
+			return safeLine.get((int) ((safeLine.size()) * Math.random()));
+	} else if (goodLine.size() != 0) {
+		if (badLine.size() == 0)
+			return goodLine.get((int) ((goodLine.size()) * Math.random()));
+		initialiseGoodLineValue();
+		initialiseBadLineValue();
 
-		ArrayList<Move> bad = new ArrayList<Move>();
-		ArrayList<Move> bad2 = new ArrayList<Move>();
-		ArrayList<Move> good = new ArrayList<Move>();
-		ArrayList<Move> good2 = new ArrayList<Move>();
+		ArrayList<Line> bad = new ArrayList<Line>();
+		ArrayList<Line> bad2 = new ArrayList<Line>();
+		ArrayList<Line> good = new ArrayList<Line>();
+		ArrayList<Line> good2 = new ArrayList<Line>();
 		int badValue = 26;
 		int bad2Value = 26;
 		int goodValue = 0;
 		int goodValue2 = 0;
-		for (Move move : badMove) {
-			if (badMoveValue.get(move) < badValue) {
+		for (Line Line : badLine) {
+			if (badLineValue.get(Line) < badValue) {
 				bad2.clear();
-				for (Move m : bad) {
+				for (Line m : bad) {
 					bad2.add(m);
 				}
 				bad2Value = badValue;
 				bad.clear();
-				bad.add(move);
-				badValue = badMoveValue.get(move);
-			} else if (badMoveValue.get(move) == badValue) {
-				bad.add(move);
+				bad.add(Line);
+				badValue = badLineValue.get(Line);
+			} else if (badLineValue.get(Line) == badValue) {
+				bad.add(Line);
 			}
 		}
-		for (Move move : goodMove) {
-			if (goodMoveValue.get(move) > goodValue) {
+		for (Line Line : goodLine) {
+			if (goodLineValue.get(Line) > goodValue) {
 				good2.clear();
-				for (Move m : good) {
+				for (Line m : good) {
 					good2.add(m);
 				}
 				goodValue2 = goodValue;
 				good.clear();
-				good.add(move);
-				goodValue = goodMoveValue.get(move);
-			} else if (goodMoveValue.get(move) == goodValue) {
-				good.add(move);
+				good.add(Line);
+				goodValue = goodLineValue.get(Line);
+			} else if (goodLineValue.get(Line) == goodValue) {
+				good.add(Line);
 			}
 		}
 
@@ -224,10 +226,10 @@ public class AI {
 			if (goodValue2 > 2) {
 				return good2.get((int) ((good2.size()) * Math.random()));
 			}
-			initialiseGoodMoveType();
-			for (Move move : good) {
-				if (goodMoveType.get(move) == 2) {
-					return move;
+			initialiseGoodLineType();
+			for (Line Line : good) {
+				if (goodLineType.get(Line) == 2) {
+					return Line;
 				}
 			}
 			return bad.get(0);
@@ -235,13 +237,13 @@ public class AI {
 			return good.get((int) ((good.size()) * Math.random()));
 
 	} else {
-		Move min = null;
+		Line min = null;
 		int minValue = 26;
-		initialiseBadMoveValue();
-		for (Move move : badMove) {
-			if (badMoveValue.get(move) < minValue) {
-				min = move;
-				minValue = badMoveValue.get(move);
+		initialiseBadLineValue();
+		for (Line Line : badLine) {
+			if (badLineValue.get(Line) < minValue) {
+				min = Line;
+				minValue = badLineValue.get(Line);
 			}
 		}
 		return min;
@@ -249,28 +251,28 @@ public class AI {
 
 }
 
-	private Move random() {
-		if (goodMove.size() != 0)
-			return goodMove.get((int) ((goodMove.size()) * Math.random()));
-		if (safeMove.size() != 0)
-			return safeMove.get((int) ((safeMove.size()) * Math.random()));
-		Vector<Move> temp = new Vector<Move>();
+	private Line random() {
+		if (goodLine.size() != 0)
+			return goodLine.get((int) ((goodLine.size()) * Math.random()));
+		if (safeLine.size() != 0)
+			return safeLine.get((int) ((safeLine.size()) * Math.random()));
+		Vector<Line> temp = new Vector<Line>();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (!horizontal[i][j])
-					temp.add(new Move(0, i, j));
+					temp.add(new Line(Direction.HORIZONTAL, i, j));
 				if (!vertical[j][i])
-					temp.add(new Move(1, j, i));
+					temp.add(new Line(Direction.VERTICAL, j, i));
 			}
 		}
 		return temp.get((int) ((temp.size()) * Math.random()));
 	}
 
-	private void initialiseGoodMove() {
+	private void initialiseGoodLine() {
 		int counter = 0;
 		boolean t1 = false;
 		boolean t2 = false;
-		goodMove.clear();
+		goodLine.clear();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (!horizontal[i][j]) {
@@ -283,7 +285,7 @@ public class AI {
 						if (box[i][j].right)
 							counter++;
 						if (box[i][j].contain() == 3)
-							goodMove.add(new Move(0, i, j));
+							goodLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else if (i == 5) {
 
 						counter = 0;
@@ -294,7 +296,7 @@ public class AI {
 						if (box[i - 1][j].right)
 							counter++;
 						if (counter == 3)
-							goodMove.add(new Move(0, i, j));
+							goodLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else {
 						counter = 0;
 						if (box[i][j].left)
@@ -315,7 +317,7 @@ public class AI {
 						if (counter == 3)
 							t2 = true;
 						if (t1 || t2)
-							goodMove.add(new Move(0, i, j));
+							goodLine.add(new Line(Direction.HORIZONTAL, i, j));
 						t1 = false;
 						t2 = false;
 					}
@@ -330,7 +332,7 @@ public class AI {
 						if (box[j][i].top)
 							counter++;
 						if (counter == 3)
-							goodMove.add(new Move(1, j, i));
+							goodLine.add(new Line(Direction.VERTICAL, j, i));
 					} else if (i == 5) {
 						counter = 0;
 						if (box[j][i - 1].left)
@@ -340,7 +342,7 @@ public class AI {
 						if (box[j][i - 1].bottom)
 							counter++;
 						if (counter == 3)
-							goodMove.add(new Move(1, j, i));
+							goodLine.add(new Line(Direction.VERTICAL, j, i));
 					} else {
 						counter = 0;
 						if (box[j][i].right)
@@ -361,7 +363,7 @@ public class AI {
 						if (counter == 3)
 							t2 = true;
 						if (t1 || t2)
-							goodMove.add(new Move(1, j, i));
+							goodLine.add(new Line(Direction.VERTICAL, j, i));
 						t1 = false;
 						t2 = false;
 					}
@@ -371,11 +373,11 @@ public class AI {
 
 	}
 
-	private void initialiseBadMove() {
+	private void initialiseBadLine() {
 		int counter = 0;
 		boolean t1 = false;
 		boolean t2 = false;
-		badMove.clear();
+		badLine.clear();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (!horizontal[i][j]) {
@@ -388,7 +390,7 @@ public class AI {
 						if (box[i][j].right)
 							counter++;
 						if (counter == 2)
-							badMove.add(new Move(0, i, j));
+							badLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else if (i == 5) {
 
 						counter = 0;
@@ -399,7 +401,7 @@ public class AI {
 						if (box[i - 1][j].right)
 							counter++;
 						if (counter == 2)
-							badMove.add(new Move(0, i, j));
+							badLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else {
 						counter = 0;
 						if (box[i][j].left)
@@ -420,7 +422,7 @@ public class AI {
 						if (counter == 2)
 							t2 = true;
 						if (t1 || t2)
-							badMove.add(new Move(0, i, j));
+							badLine.add(new Line(Direction.HORIZONTAL, i, j));
 						t1 = false;
 						t2 = false;
 					}
@@ -435,7 +437,7 @@ public class AI {
 						if (box[j][i].top)
 							counter++;
 						if (counter == 2)
-							badMove.add(new Move(1, j, i));
+							badLine.add(new Line(Direction.VERTICAL, j, i));
 					} else if (i == 5) {
 						counter = 0;
 						if (box[j][i - 1].left)
@@ -445,7 +447,7 @@ public class AI {
 						if (box[j][i - 1].bottom)
 							counter++;
 						if (counter == 2)
-							badMove.add(new Move(1, j, i));
+							badLine.add(new Line(Direction.VERTICAL, j, i));
 					} else {
 						counter = 0;
 						if (box[j][i].right)
@@ -466,18 +468,18 @@ public class AI {
 						if (counter == 2)
 							t2 = true;
 						if (t1 || t2)
-							badMove.add(new Move(1, j, i));
+							badLine.add(new Line(Direction.VERTICAL, j, i));
 						t1 = false;
 						t2 = false;
 					}
 				}
 			}
 		}
-		for (Move a : goodMove) {
+		for (Line a : goodLine) {
 			try {
-				for (Move b : badMove) {
-					if (a.direction == b.direction && a.a == b.a && a.b == b.b) {
-						badMove.remove(b);
+				for (Line b : badLine) {
+					if (a.direction() == b.direction() && a.row() == b.row() && a.column() == b.column()) {
+						badLine.remove(b);
 					}
 				}
 			} catch (Exception e) {
@@ -485,11 +487,11 @@ public class AI {
 		}
 	}
 
-	private void initialiseSafeMove() {
+	private void initialiseSafeLine() {
 		int counter = 0;
 		boolean t1 = false;
 		boolean t2 = false;
-		safeMove.clear();
+		safeLine.clear();
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -503,7 +505,7 @@ public class AI {
 						if (box[i][j].right)
 							counter++;
 						if (counter < 2)
-							safeMove.add(new Move(0, i, j));
+							safeLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else if (i == 5) {
 
 						counter = 0;
@@ -514,7 +516,7 @@ public class AI {
 						if (box[i - 1][j].right)
 							counter++;
 						if (counter < 2)
-							safeMove.add(new Move(0, i, j));
+							safeLine.add(new Line(Direction.HORIZONTAL, i, j));
 					} else {
 						counter = 0;
 						if (box[i][j].left)
@@ -535,7 +537,7 @@ public class AI {
 						if (counter < 2)
 							t2 = true;
 						if (t1 && t2)
-							safeMove.add(new Move(0, i, j));
+							safeLine.add(new Line(Direction.HORIZONTAL, i, j));
 						t1 = false;
 						t2 = false;
 					}
@@ -550,7 +552,7 @@ public class AI {
 						if (box[j][i].top)
 							counter++;
 						if (counter < 2)
-							safeMove.add(new Move(1, j, i));
+							safeLine.add(new Line(Direction.VERTICAL, j, i));
 					} else if (i == 5) {
 						counter = 0;
 						if (box[j][i - 1].left)
@@ -560,7 +562,7 @@ public class AI {
 						if (box[j][i - 1].bottom)
 							counter++;
 						if (counter < 2)
-							safeMove.add(new Move(1, j, i));
+							safeLine.add(new Line(Direction.VERTICAL, j, i));
 					} else {
 						counter = 0;
 						if (box[j][i].right)
@@ -581,7 +583,7 @@ public class AI {
 						if (counter < 2)
 							t2 = true;
 						if (t1 && t2)
-							safeMove.add(new Move(1, j, i));
+							safeLine.add(new Line(Direction.VERTICAL, j, i));
 						t1 = false;
 						t2 = false;
 					}
@@ -593,11 +595,11 @@ public class AI {
 	private void initialiseBoard() {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (SBoard.horizontal[i][j] == 0)
+				if (game.isLineOccupied(Direction.HORIZONTAL,i,j))
 					horizontal[i][j] = false;
 				else
 					horizontal[i][j] = true;
-				if (SBoard.vertical[j][i] == 0)
+				if (game.isLineOccupied(Direction.VERTICAL,j,i))
 					vertical[j][i] = false;
 				else
 					vertical[j][i] = true;
@@ -611,56 +613,56 @@ public class AI {
 		}
 	}
 
-	private void initialiseGoodMoveValue() {
-		if (goodMove.isEmpty())
+	private void initialiseGoodLineValue() {
+		if (goodLine.isEmpty())
 			return;
-		goodMoveValue.clear();
-		for (Move move : goodMove) {
+		goodLineValue.clear();
+		for (Line Line : goodLine) {
 			VBoard vboard = new VBoard(horizontal, vertical);
-			goodMoveValue.put(move, vboard.getGoodMoveValue(move));
+			goodLineValue.put(Line, vboard.getGoodLineValue(Line));
 		}
 	}
 
-	private void initialiseBadMoveValue() {
-		if (badMove.isEmpty())
+	private void initialiseBadLineValue() {
+		if (badLine.isEmpty())
 			return;
-		badMoveValue.clear();
-		for (Move move : badMove) {
+		badLineValue.clear();
+		for (Line Line : badLine) {
 			VBoard vboard = new VBoard(horizontal, vertical);
-			badMoveValue.put(move, vboard.getBadMoveValue(move));
+			badLineValue.put(Line, vboard.getBadLineValue(Line));
 		}
 	}
 
-	private void initialiseGoodMoveType() {
-		if (goodMove.isEmpty())
+	private void initialiseGoodLineType() {
+		if (goodLine.isEmpty())
 			return;
-		goodMoveType.clear();
-		for (Move move : goodMove) {
-			if (move.direction == 0) {
-				if (move.a == 0)
-					goodMoveType.put(move, 1);
-				else if (move.a == 5)
-					goodMoveType.put(move, 1);
+		goodLineType.clear();
+		for (Line Line : goodLine) {
+			if (Line.direction() == Direction.HORIZONTAL) {
+				if (Line.row() == 0)
+					goodLineType.put(Line, 1);
+				else if (Line.row() == 5)
+					goodLineType.put(Line, 1);
 				else {
 					int counter = 0;
-					if (box[move.a][move.b].contain() == 3)
+					if (box[Line.row()][Line.column()].contain() == 3)
 						counter++;
-					if (box[move.a - 1][move.b].contain() == 3)
+					if (box[Line.row() - 1][Line.column()].contain() == 3)
 						counter++;
-					goodMoveType.put(move, counter);
+					goodLineType.put(Line, counter);
 				}
 			} else {
-				if (move.b == 0)
-					goodMoveType.put(move, 1);
-				else if (move.b == 5)
-					goodMoveType.put(move, 1);
+				if (Line.column() == 0)
+					goodLineType.put(Line, 1);
+				else if (Line.column() == 5)
+					goodLineType.put(Line, 1);
 				else {
 					int counter = 0;
-					if (box[move.a][move.b].contain() == 3)
+					if (box[Line.row()][Line.column()].contain() == 3)
 						counter++;
-					if (box[move.a][move.b - 1].contain() == 3)
+					if (box[Line.row()][Line.column() - 1].contain() == 3)
 						counter++;
-					goodMoveType.put(move, counter);
+					goodLineType.put(Line, counter);
 				}
 
 			}
@@ -733,14 +735,14 @@ public class AI {
 			}
 		}
 
-		void add(Move move) {
-			int type = move.direction;
-			int a = move.a;
-			int b = move.b;
+		void add(Line Line) {
+			Direction type = Line.direction();
+			int a = Line.row();
+			int b = Line.column();
 			keepgoing = false;
 
 			switch (type) {
-			case 0:
+				case HORIZONTAL:
 				if (!horizontal[a][b]) {
 					horizontal[a][b] = true;
 					if (a == 0) {
@@ -771,7 +773,7 @@ public class AI {
 					keepgoing = true;
 				}
 				break;
-			case 1:
+				case VERTICAL:
 				if (!vertical[a][b]) {
 					vertical[a][b] = true;
 					if (b == 0) {
@@ -816,18 +818,18 @@ public class AI {
 			return counter;
 		}
 
-		int getBadMoveValue(Move move) {
+		int getBadLineValue(Line Line) {
 			int start, end;
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
+			if (Line.direction() == Direction.HORIZONTAL)
+				this.horizontal[Line.row()][Line.column()] = true;
 			else
-				this.vertical[move.a][move.b] = true;
-			AI ai = new AI(0);
+				this.vertical[Line.row()][Line.column()] = true;
+			AIPlayer ai = new AIPlayer(0, game);
 			ini();
 			start = this.getOccupiedNumber();
 			keepgoing = true;
 			while (keepgoing) {
-				add(ai.move(this));
+				add(ai.Line(this));
 				if (this.getOccupiedNumber() == 25)
 					break;
 			}
@@ -835,18 +837,18 @@ public class AI {
 			return (end - start);
 		}
 
-		int getGoodMoveValue(Move move) {
+		int getGoodLineValue(Line Line) {
 			int start, end;
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
+			if (Line.direction() == Direction.HORIZONTAL)
+				this.horizontal[Line.row()][Line.column()] = true;
 			else
-				this.vertical[move.a][move.b] = true;
-			AI ai = new AI(0);
+				this.vertical[Line.row()][Line.column()] = true;
+			AIPlayer ai = new AIPlayer(0, game);
 			ini();
 			start = this.getOccupiedNumber();
 			keepgoing = true;
 			while (keepgoing) {
-				add(ai.move(this));
+				add(ai.Line(this));
 				if (this.getOccupiedNumber() == 25)
 					break;
 			}
@@ -854,47 +856,47 @@ public class AI {
 			return (end - start);
 		}
 
-		int getCanWinValue(Move move) {
+		int getCanWinValue(Line Line) {
 			ini();
 			int ocpdAlready = getOccupiedNumber();
-			if (move.direction == 0)
-				this.horizontal[move.a][move.b] = true;
+			if (Line.direction() == Direction.HORIZONTAL)
+				this.horizontal[Line.row()][Line.column()] = true;
 			else
-				this.vertical[move.a][move.b] = true;
+				this.vertical[Line.row()][Line.column()] = true;
 			int He = 0;
 			int Me = 0;
 			ini();
 			Me = getOccupiedNumber() - ocpdAlready;
-			AI ai = new AI(2);
-			int playernow;
+			AIPlayer ai = new AIPlayer(2, game);
+			int playerNow;
 			if (Me == 1)
-				playernow = 0;
+				playerNow = 0;
 			else
-				playernow = 1;
+				playerNow = 1;
 
 			while (this.getOccupiedNumber() != 25) {
-				if (playernow == 0) {
+				if (playerNow == 0) {
 					int temp = getOccupiedNumber();
 					keepgoing = true;
 					while (keepgoing) {
-						add(ai.move(this));
+						add(ai.Line(this));
 						if (this.getOccupiedNumber() == 25)
 							break;
 					}
 					temp = getOccupiedNumber() - temp;
 					Me = Me + temp;
-					playernow=1;
+					playerNow=1;
 				} else {
 					int temp = getOccupiedNumber();
 					keepgoing = true;
 					while (keepgoing) {
-						add(ai.move(this));
+						add(ai.Line(this));
 						if (this.getOccupiedNumber() == 25)
 							break;
 					}
 					temp = getOccupiedNumber() - temp;
 					He = He + temp;
-					playernow=0;
+					playerNow=0;
 				}
 			}
 			return Me-He;

@@ -77,6 +77,7 @@ public class GameView extends View implements Observer {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        playersState.playerTouched();
         super.onDraw(canvas);
         if (game == null)
             return;

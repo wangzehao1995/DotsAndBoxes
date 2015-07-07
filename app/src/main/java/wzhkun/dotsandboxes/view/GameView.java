@@ -48,6 +48,7 @@ public class GameView extends View implements Observer {
         this.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                playersState.playerTouched();
                 receiveInput(event);
                 return false;
             }
@@ -77,7 +78,7 @@ public class GameView extends View implements Observer {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        playersState.playerTouched();
+
         super.onDraw(canvas);
         if (game == null)
             return;

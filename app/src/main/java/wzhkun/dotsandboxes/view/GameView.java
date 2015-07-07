@@ -33,7 +33,7 @@ public class GameView extends View implements Observer {
     protected static final float add6 = (float) 9 / 824;
 
     protected static final int[] playerColors = new int[]{0xFF6C69FF, 0x88E5004F};
-    public static final int GREEY = 0xFF666666;
+    public static final int GRAY = 0xFF666666;
     protected Game game;
     protected Line move;
     protected Paint paint;
@@ -160,7 +160,7 @@ public class GameView extends View implements Observer {
         }
 
         //paint points
-        paint.setColor(GREEY);
+        paint.setColor(GRAY);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 canvas.drawCircle(start + add6 + j * add5 + 1, start + add6 + i

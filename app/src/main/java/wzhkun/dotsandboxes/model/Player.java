@@ -7,6 +7,16 @@ public abstract class Player {
     public abstract Line move();
     private String name;
 
+    public Game getGame() {
+        return game;
+    }
+
+    public void addToGame(Game game) {
+        this.game = game;
+    }
+
+    private Game game;
+
     public Player(String name){
         this.name=name;
     }

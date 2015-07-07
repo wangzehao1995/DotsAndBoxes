@@ -27,6 +27,6 @@ import wzhkun.dotsandboxes.model.Player;
 public class SingleActivity extends DoubleActivity {
     @Override
     protected Player[] initPlayers() {
-        return new Player[]{new HumanPlayer("Player1"),new AIPlayer("Computer",1,this.gameView.getGame())};
+        return new Player[]{new HumanPlayer("Player1"),new AIPlayer("Computer",1)};
     }
 }

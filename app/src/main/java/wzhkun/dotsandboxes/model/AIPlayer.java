@@ -15,16 +15,15 @@ public class AIPlayer extends Player{
 	private HashMap<Line, Integer> goodLineValue;
 	private HashMap<Line, Integer> badLineValue;
 	private HashMap<Line, Integer> goodLineType;
-	private Game game;
 
 	private AIPlayer(int difficulty,Game game){
-		this(null,difficulty,game);
+		this(null,difficulty);
+		this.addToGame(game);
 	}
 
-	public AIPlayer(String name,int difficulty, Game game) {
+	public AIPlayer(String name,int difficulty) {
 		super(name);
 		this.difficulty = difficulty;
-		this.game = game;
 		horizontal = new boolean[6][5];
 		vertical = new boolean[5][6];
 		box = new Box[5][5];
@@ -600,11 +599,11 @@ public class AIPlayer extends Player{
 	private void initialiseBoard() {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (game.isLineOccupied(Direction.HORIZONTAL,i,j))
+				if (getGame().isLineOccupied(Direction.HORIZONTAL,i,j))
 					horizontal[i][j] = false;
 				else
 					horizontal[i][j] = true;
-				if (game.isLineOccupied(Direction.VERTICAL,j,i))
+				if (getGame().isLineOccupied(Direction.VERTICAL,j,i))
 					vertical[j][i] = false;
 				else
 					vertical[j][i] = true;
@@ -829,7 +828,7 @@ public class AIPlayer extends Player{
 				this.horizontal[Line.row()][Line.column()] = true;
 			else
 				this.vertical[Line.row()][Line.column()] = true;
-			AIPlayer ai = new AIPlayer(0, game);
+			AIPlayer ai = new AIPlayer(0, getGame());
 			ini();
 			start = this.getOccupiedNumber();
 			keepgoing = true;
@@ -848,7 +847,7 @@ public class AIPlayer extends Player{
 				this.horizontal[Line.row()][Line.column()] = true;
 			else
 				this.vertical[Line.row()][Line.column()] = true;
-			AIPlayer ai = new AIPlayer(0, game);
+			AIPlayer ai = new AIPlayer(0, getGame());
 			ini();
 			start = this.getOccupiedNumber();
 			keepgoing = true;
@@ -872,7 +871,7 @@ public class AIPlayer extends Player{
 			int Me = 0;
 			ini();
 			Me = getOccupiedNumber() - ocpdAlready;
-			AIPlayer ai = new AIPlayer(2, game);
+			AIPlayer ai = new AIPlayer(2, getGame());
 			int playerNow;
 			if (Me == 1)
 				playerNow = 0;

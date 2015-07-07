@@ -49,8 +49,8 @@ public class Game extends Observable {
             }
             if (players[i] == firstMover) {
                 playerNowIndex = i;
-                break;
             }
+            players[i].addToGame(this);
         }
 
         if (players.length == 0)

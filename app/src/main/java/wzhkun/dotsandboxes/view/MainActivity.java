@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(sound);
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -42,7 +41,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(doubleee);
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -52,7 +50,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(helpp);
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -62,7 +59,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(singlee);
-				// TODO Auto-generated method stub
 				
 			}
 			

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class AIPlayer implements Player{
+public class AIPlayer extends Player{
 	private int difficulty;
 	private boolean[][] horizontal;
 	private boolean[][] vertical;
@@ -17,7 +17,12 @@ public class AIPlayer implements Player{
 	private HashMap<Line, Integer> goodLineType;
 	private Game game;
 
-	public AIPlayer(int difficulty, Game game) {
+	private AIPlayer(int difficulty,Game game){
+		this(null,difficulty,game);
+	}
+
+	public AIPlayer(String name,int difficulty, Game game) {
+		super(name);
 		this.difficulty = difficulty;
 		this.game = game;
 		horizontal = new boolean[6][5];

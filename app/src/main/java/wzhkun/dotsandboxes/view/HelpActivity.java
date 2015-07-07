@@ -29,7 +29,6 @@ public class HelpActivity extends Activity {
 				startActivity(mainActivity);
 				finish();
 
-				// TODO Auto-generated method stub
 
 			}
 

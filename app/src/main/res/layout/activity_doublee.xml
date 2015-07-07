@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Doublee" >
 
-    <wzhkun.dotsandboxes.model.Board
+    <wzhkun.dotsandboxes.view.GameView
         android:id="@+id/view1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

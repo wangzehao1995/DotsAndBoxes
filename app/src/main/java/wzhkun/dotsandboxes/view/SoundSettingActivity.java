@@ -39,7 +39,6 @@ public class SoundSettingActivity extends Activity {
 				startActivity(mainActivity);
 				finish();
 
-				// TODO Auto-generated method stub
 
 			}
 
@@ -54,8 +53,7 @@ public class SoundSettingActivity extends Activity {
   
             @Override  
             public void onCheckedChanged(CompoundButton buttonView,  
-                    boolean isChecked) {  
-                // TODO Auto-generated method stub  
+                    boolean isChecked) {
                 if (isChecked) {  
                     music=true; 
                     save();
@@ -72,8 +70,7 @@ public class SoundSettingActivity extends Activity {
 			  
             @Override  
             public void onCheckedChanged(CompoundButton buttonView,  
-                    boolean isChecked) {  
-                // TODO Auto-generated method stub  
+                    boolean isChecked) {
                 if (isChecked) {  
                     touch=true; 
                     save();

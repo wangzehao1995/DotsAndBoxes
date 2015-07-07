@@ -7,22 +7,40 @@ import java.util.Observable;
  * Created by wangzehao on 2015/7/6.
  */
 public class Game extends Observable {
+    public Player[] getPlayers() {
+        return players;
+    }
+
     private Player[] players;
     private int playerNowIndex;
+
+    public int getWeigh() {
+        return weigh;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private int weigh;
     private int height;
-    private Player[][] occupied = new Player[height][weigh];
-    private boolean[][] horizontalLines = new boolean[height + 1][weigh];
-    private boolean[][] verticalLines = new boolean[height][weigh + 1];
+    private Player[][] occupied;
+    private boolean[][] horizontalLines;
+    private boolean[][] verticalLines;
+    private Line latestLine;
 
-    public Game(Player firstMover, Player... players) {
-        this(5, 5, firstMover, players);
+    public Line getLatestLine() {
+        return latestLine;
     }
 
     public Game(int weigh, int height, Player firstMover, Player... players) {
         this.weigh = weigh;
         this.height = height;
         this.players = players;
+
+        occupied = new Player[height][weigh];
+        horizontalLines = new boolean[height + 1][weigh];
+        verticalLines = new boolean[height][weigh + 1];
 
         this.playerNowIndex = 0;
         for (int i = 0; i < players.length; i++) {
@@ -44,9 +62,9 @@ public class Game extends Observable {
     public void start() {
         while (!isGameFinished()) {
             addMove(playerNow().move());
+            setChanged();
             notifyObservers();
         }
-        notifyObservers(getWinners());
     }
 
     public void addMove(Line move) {
@@ -55,6 +73,7 @@ public class Game extends Observable {
         }
         boolean newBoxOccupied = tryToOccupyBox(move);
         setLineOccupied(move);
+        latestLine=move;
 
         if (!newBoxOccupied)
             toNextPlayer();
@@ -78,23 +97,37 @@ public class Game extends Observable {
         throw new java.lang.IllegalArgumentException(line.direction().toString());
     }
 
+    public Player getBoxOccupier(int row,int column){
+        return occupied[row][column];
+    }
+
     public int getPlayerOccupyingBoxCount(Player player) {
-        return 0;
+        int count=0;
+        for(int i=0;i<occupied.length;i++) {
+            for (int j = 0; j < occupied[0].length; j++) {
+                if(getBoxOccupier(i,j)==player)
+                    count++;
+            }
+        }
+        return count;
     }
 
     private boolean tryToOccupyBox(Line move) {
-        return tryToOccupyLeftBox(move)
-                || tryToOccupyRightBox(move)
-                || tryToOccupyUnderBox(move)
-                || tryToOccupyUpperBox(move);
+        boolean rightOccupied = tryToOccupyRightBox(move);
+        boolean underOccupied = tryToOccupyUnderBox(move);
+        boolean upperOccupied = tryToOccupyUpperBox(move);
+        boolean leftOccupied = tryToOccupyLeftBox(move);
+        return leftOccupied||rightOccupied||upperOccupied||underOccupied;
     }
 
     private void setLineOccupied(Line line) {
         switch (line.direction()) {
             case HORIZONTAL:
                 horizontalLines[line.row()][line.column()] = true;
+                break;
             case VERTICAL:
                 verticalLines[line.row()][line.column()] = true;
+                break;
         }
     }
 
@@ -116,7 +149,7 @@ public class Game extends Observable {
     }
 
     private boolean tryToOccupyUnderBox(Line move) {
-        if (move.direction() != Direction.HORIZONTAL || move.row() >= (height + 1))
+        if (move.direction() != Direction.HORIZONTAL || move.row() >= (height))
             return false;
         if (isLineOccupied(Direction.HORIZONTAL, move.row() + 1, move.column())
                 && isLineOccupied(Direction.VERTICAL, move.row(), move.column())
@@ -142,7 +175,7 @@ public class Game extends Observable {
     }
 
     private boolean tryToOccupyRightBox(Line move) {
-        if (move.direction() != Direction.VERTICAL || move.column() >= (weigh + 1))
+        if (move.direction() != Direction.VERTICAL || move.column() >= (weigh))
             return false;
         if (isLineOccupied(Direction.VERTICAL, move.row(), move.column() + 1)
                 && isLineOccupied(Direction.HORIZONTAL, move.row(), move.column())
@@ -161,14 +194,17 @@ public class Game extends Observable {
     private boolean isGameFinished() {
         for (int i = 0; i < occupied.length; i++) {
             for (int j = 0; j < occupied[0].length; j++) {
-                if (occupied[i][j] == null)
+                 if (occupied[i][j] == null)
                     return false;
             }
         }
         return true;
     }
 
-    private Player[] getWinners() {
+    public Player[] getWinners() {
+        if(!isGameFinished()){
+            return null;
+        }
         int playerCount = players.length;
         int[] occupyingBoxCount = new int[playerCount];
         int maxOccupyingBoxCount=0;

@@ -9,11 +9,11 @@
     tools:context=".Doublee" >
 
     <wzhkun.dotsandboxes.view.GameView
-        android:id="@+id/view1"
+        android:id="@+id/gameView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/imageButtonReturn1"
-        android:layout_below="@+id/imageView1"
+        android:layout_above="@+id/returnButton"
+        android:layout_below="@+id/player1picture"
         android:layout_marginBottom="15dp" 
         android:layout_marginTop="25dp" />
 
@@ -22,18 +22,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/imageView1"
+            android:layout_toRightOf="@+id/player1picture"
             android:text="Player1" />
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/player1picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:src="@mipmap/player" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/player2picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,12 +44,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/imageView2"
+            android:layout_toLeftOf="@id/player2picture"
             android:text="Player2"
              />
 
         <ImageButton
-            android:id="@+id/imageButtonReturn1"
+            android:id="@+id/returnButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -58,11 +58,11 @@
              />
         
         <ImageButton
-            android:id="@+id/imageButtonRefresh1"
+            android:id="@+id/refreshButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageButtonReturn1"
-            android:layout_toRightOf="@+id/imageButtonReturn1"
+            android:layout_alignTop="@+id/returnButton"
+            android:layout_toRightOf="@+id/returnButton"
             android:background="@mipmap/shuaxin" />
 
         <TextView
@@ -103,7 +103,7 @@
             android:text="Occupying 0" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/playerNowPointer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/player1name"

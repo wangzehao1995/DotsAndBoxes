@@ -27,12 +27,12 @@ public class AIPlayer extends Player {
         horizontal = new boolean[6][5];
         vertical = new boolean[5][6];
         box = new Box[5][5];
-        safeLine = new Vector<Line>();
-        goodLine = new Vector<Line>();
-        badLine = new Vector<Line>();
-        badLineValue = new HashMap<Line, Integer>();
-        goodLineValue = new HashMap<Line, Integer>();
-        goodLineType = new HashMap<Line, Integer>();
+        safeLine = new Vector<>();
+        goodLine = new Vector<>();
+        badLine = new Vector<>();
+        badLineValue = new HashMap<>();
+        goodLineValue = new HashMap<>();
+        goodLineType = new HashMap<>();
 
     }
 
@@ -114,10 +114,10 @@ public class AIPlayer extends Player {
             initialiseGoodLineValue();
             initialiseBadLineValue();
 
-            ArrayList<Line> bad = new ArrayList<Line>();
-            ArrayList<Line> bad2 = new ArrayList<Line>();
-            ArrayList<Line> good = new ArrayList<Line>();
-            ArrayList<Line> good2 = new ArrayList<Line>();
+            ArrayList<Line> bad = new ArrayList<>();
+            ArrayList<Line> bad2 = new ArrayList<>();
+            ArrayList<Line> good = new ArrayList<>();
+            ArrayList<Line> good2 = new ArrayList<>();
             int badValue = 26;
             int bad2Value = 26;
             int goodValue = 0;
@@ -193,10 +193,10 @@ public class AIPlayer extends Player {
             initialiseGoodLineValue();
             initialiseBadLineValue();
 
-            ArrayList<Line> bad = new ArrayList<Line>();
-            ArrayList<Line> bad2 = new ArrayList<Line>();
-            ArrayList<Line> good = new ArrayList<Line>();
-            ArrayList<Line> good2 = new ArrayList<Line>();
+            ArrayList<Line> bad = new ArrayList<>();
+            ArrayList<Line> bad2 = new ArrayList<>();
+            ArrayList<Line> good = new ArrayList<>();
+            ArrayList<Line> good2 = new ArrayList<>();
             int badValue = 26;
             int bad2Value = 26;
             int goodValue = 0;
@@ -265,20 +265,19 @@ public class AIPlayer extends Player {
             return goodLine.get((int) ((goodLine.size()) * Math.random()));
         if (safeLine.size() != 0)
             return safeLine.get((int) ((safeLine.size()) * Math.random()));
-        Vector<Line> temp = new Vector<Line>();
-        for (int i = 0; i < 6; i++) {
+        Vector<Line> temp = new Vector<>();
+        for (int i = 0; i < 6; i++)
             for (int j = 0; j < 5; j++) {
                 if (!horizontal[i][j])
                     temp.add(new Line(Direction.HORIZONTAL, i, j));
                 if (!vertical[j][i])
                     temp.add(new Line(Direction.VERTICAL, j, i));
             }
-        }
         return temp.get((int) ((temp.size()) * Math.random()));
     }
 
     private void initialiseGoodLine() {
-        int counter = 0;
+        int counter;
         boolean t1 = false;
         boolean t2 = false;
         goodLine.clear();

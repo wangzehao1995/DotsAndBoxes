@@ -1,18 +1,49 @@
 package wzhkun.dotsandboxes.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
-/**
- * Created by wangzehao on 2015/7/6.
- */
 public class Game extends Observable {
+    private Player[] players;
+    private int playerNowIndex;
+    private int weigh;
+    private int height;
+    private Player[][] occupied;
+    private boolean[][] horizontalLines;
+    private boolean[][] verticalLines;
+    private Line latestLine;
+
+    public Game(int weigh, int height, Player firstMover, Player... players) {
+        assertGameBoardSizeRight(weigh, height);
+        assertPlayersNotNull(players);
+        assertPlayerCountRight(players);
+
+        this.weigh = weigh;
+        this.height = height;
+        this.players = players;
+
+        occupied = new Player[height][weigh];
+        horizontalLines = new boolean[height + 1][weigh];
+        verticalLines = new boolean[height][weigh + 1];
+
+        addPlayersToGame(players);
+        initFirstMover(firstMover, players);
+    }
+
+    private void assertPlayerCountRight(Player[] players) {
+        if (players.length == 0)
+            throw new IllegalArgumentException("No Player");
+    }
+
+    private void assertGameBoardSizeRight(float weigh, float height) {
+        if (weigh < 1 || height < 1)
+            throw new IllegalArgumentException("Size Too Small");
+    }
+
     public Player[] getPlayers() {
         return players;
     }
-
-    private Player[] players;
-    private int playerNowIndex;
 
     public int getWeigh() {
         return weigh;
@@ -22,41 +53,30 @@ public class Game extends Observable {
         return height;
     }
 
-    private int weigh;
-    private int height;
-    private Player[][] occupied;
-    private boolean[][] horizontalLines;
-    private boolean[][] verticalLines;
-    private Line latestLine;
-
     public Line getLatestLine() {
         return latestLine;
     }
 
-    public Game(int weigh, int height, Player firstMover, Player... players) {
-        this.weigh = weigh;
-        this.height = height;
-        this.players = players;
-
-        occupied = new Player[height][weigh];
-        horizontalLines = new boolean[height + 1][weigh];
-        verticalLines = new boolean[height][weigh + 1];
-
-        this.playerNowIndex = 0;
-        for (int i = 0; i < players.length; i++) {
-            if (players[i] == null) {
-                throw new java.lang.IllegalArgumentException("Player Is Null");
+    private void assertPlayersNotNull(Player[] players) {
+        for (Player player : players) {
+            if (player == null) {
+                throw new IllegalArgumentException("Player Is Null");
             }
+        }
+    }
+
+    private void initFirstMover(Player firstMover, Player[] players) {
+        for (int i = 0; i < players.length; i++) {
             if (players[i] == firstMover) {
                 playerNowIndex = i;
             }
-            players[i].addToGame(this);
         }
+    }
 
-        if (players.length == 0)
-            throw new java.lang.IllegalArgumentException("No Player");
-        if (weigh < 1 || height < 1)
-            throw new java.lang.IllegalArgumentException("Size Too Small");
+    private void addPlayersToGame(Player[] players) {
+        for (Player player : players) {
+            player.addToGame(this);
+        }
     }
 
     public void start() {
@@ -73,7 +93,7 @@ public class Game extends Observable {
         }
         boolean newBoxOccupied = tryToOccupyBox(move);
         setLineOccupied(move);
-        latestLine=move;
+        latestLine = move;
 
         if (!newBoxOccupied)
             toNextPlayer();
@@ -97,15 +117,15 @@ public class Game extends Observable {
         throw new java.lang.IllegalArgumentException(line.direction().toString());
     }
 
-    public Player getBoxOccupier(int row,int column){
+    public Player getBoxOccupier(int row, int column) {
         return occupied[row][column];
     }
 
     public int getPlayerOccupyingBoxCount(Player player) {
-        int count=0;
-        for(int i=0;i<occupied.length;i++) {
+        int count = 0;
+        for (int i = 0; i < occupied.length; i++) {
             for (int j = 0; j < occupied[0].length; j++) {
-                if(getBoxOccupier(i,j)==player)
+                if (getBoxOccupier(i, j) == player)
                     count++;
             }
         }
@@ -117,7 +137,7 @@ public class Game extends Observable {
         boolean underOccupied = tryToOccupyUnderBox(move);
         boolean upperOccupied = tryToOccupyUpperBox(move);
         boolean leftOccupied = tryToOccupyLeftBox(move);
-        return leftOccupied||rightOccupied||upperOccupied||underOccupied;
+        return leftOccupied || rightOccupied || upperOccupied || underOccupied;
     }
 
     private void setLineOccupied(Line line) {
@@ -192,9 +212,9 @@ public class Game extends Observable {
     }
 
     private boolean isGameFinished() {
-        for (int i = 0; i < occupied.length; i++) {
+        for (Player[] anOccupied : occupied) {
             for (int j = 0; j < occupied[0].length; j++) {
-                 if (occupied[i][j] == null)
+                if (anOccupied[j] == null)
                     return false;
             }
         }
@@ -202,23 +222,27 @@ public class Game extends Observable {
     }
 
     public Player[] getWinners() {
-        if(!isGameFinished()){
+        if (!isGameFinished()) {
             return null;
         }
-        int playerCount = players.length;
-        int[] occupyingBoxCount = new int[playerCount];
-        int maxOccupyingBoxCount=0;
-        for (int player_i = 0; player_i < playerCount; player_i++) {
-            occupyingBoxCount[player_i]=getPlayerOccupyingBoxCount(players[player_i]);
-            if(occupyingBoxCount[player_i]>maxOccupyingBoxCount)
-                maxOccupyingBoxCount=occupyingBoxCount[player_i];
+
+        int[] playersOccupyingBoxCount = new int[players.length];
+        for (int i = 0; i < players.length; i++) {
+            playersOccupyingBoxCount[i] = getPlayerOccupyingBoxCount(players[i]);
         }
-        ArrayList<Player> winners=new ArrayList<>();
-        for (int player_i = 0; player_i < playerCount; player_i++) {
-            if(occupyingBoxCount[player_i]==maxOccupyingBoxCount){
-                winners.add(players[player_i]);
-            }
+
+        int maxOccupyingCount = 0;
+        for (int thisPlayerOccupyingBoxCount : playersOccupyingBoxCount) {
+            maxOccupyingCount = Math.max(maxOccupyingCount, thisPlayerOccupyingBoxCount);
         }
-        return winners.toArray(new Player[0]);
+
+        List<Player> winners = new ArrayList<>();
+        for (int i = 0; i < players.length; i++) {
+            if (playersOccupyingBoxCount[i] == maxOccupyingCount)
+                winners.add(players[i]);
+        }
+
+        return (Player[]) winners.toArray();
     }
+
 }

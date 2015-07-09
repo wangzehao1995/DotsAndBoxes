@@ -30,8 +30,8 @@ public class SoundSettingActivity extends Activity {
 		setContentView(R.layout.activity_sound);
 		
 		mainActivity = new Intent(this, MainActivity.class);
-		ImageButton returnn = (ImageButton) findViewById(R.id.imageButtonReturnsound);
-		returnn.setOnClickListener(new OnClickListener() {
+		ImageButton returnButton = (ImageButton) findViewById(R.id.imageButtonReturnsound);
+		returnButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -91,8 +91,7 @@ public class SoundSettingActivity extends Activity {
 			dos.writeBoolean(music);
 			dos.writeBoolean(touch);
 			dos.close();
-		} catch (Exception e) {
-System.out.println(e);
+		} catch (Exception ignored) {
 		}
 	}
 

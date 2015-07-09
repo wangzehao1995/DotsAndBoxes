@@ -20,8 +20,8 @@ public class HelpActivity extends Activity {
 	
 		
 		mainActivity = new Intent(this, MainActivity.class);
-		ImageButton returnn = (ImageButton) findViewById(R.id.imageButtonReturn2);
-		returnn.setOnClickListener(new OnClickListener() {
+		ImageButton returnButton = (ImageButton) findViewById(R.id.imageButtonReturn2);
+		returnButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {

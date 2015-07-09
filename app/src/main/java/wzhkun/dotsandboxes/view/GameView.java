@@ -1,6 +1,5 @@
 package wzhkun.dotsandboxes.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,7 +19,6 @@ import wzhkun.dotsandboxes.model.HumanPlayer;
 import wzhkun.dotsandboxes.model.Line;
 import wzhkun.dotsandboxes.model.Player;
 
-@SuppressLint("ClickableViewAccessibility")
 public class GameView extends View implements Observer {
     protected static final float radius = (float) 14 / 824;
     protected static final float start = (float) 6 / 824;
@@ -53,10 +51,6 @@ public class GameView extends View implements Observer {
                 return false;
             }
         });
-    }
-
-    public Game getGame() {
-        return game;
     }
 
     public void setPlayersState(PlayersStateView playersState) {
@@ -207,7 +201,7 @@ public class GameView extends View implements Observer {
             }
         }
 
-        if (a != -1 && b != -1 && d != -1) {
+        if ((a != -1) && (b != -1)) {
             Direction direction;
             if (d == 0)
                 direction = Direction.HORIZONTAL;

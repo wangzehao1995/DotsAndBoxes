@@ -11,12 +11,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import wzhkun.dotsandboxes.R;
@@ -25,9 +25,8 @@ import wzhkun.dotsandboxes.model.Player;
 
 public class DoubleActivity extends Activity implements PlayersStateView {
 
-    private static DoubleActivity myself;
     protected GameView gameView;
-    TextView player1state, player2state, player1occupying, player2occupying;
+    protected TextView player1state, player2state, player1occupying, player2occupying;
     ImageView playerNowPointer;
     boolean music, touchSoundOn;
     SoundPool soundpool;
@@ -42,7 +41,7 @@ public class DoubleActivity extends Activity implements PlayersStateView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         mediaPlayer = MediaPlayer.create(this, R.raw.home);
-        soundpool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        soundpool = new SoundPool(5,AudioManager.STREAM_MUSIC,0);
         soundpool.load(this, R.raw.ben, BIND_ADJUST_WITH_ACTIVITY);
         try {
             FileInputStream fis = openFileInput("sound");
@@ -58,9 +57,6 @@ public class DoubleActivity extends Activity implements PlayersStateView {
             mediaPlayer.start();
         }
 
-
-        myself = this;
-        int[] mover = new int[1];
         ImageButton returnButton = (ImageButton) findViewById(R.id.returnButton);
         returnButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -111,12 +107,11 @@ public class DoubleActivity extends Activity implements PlayersStateView {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode,@NonNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             showExitDialog();
         }
         return true;
-
     }
 
     @Override
@@ -126,7 +121,7 @@ public class DoubleActivity extends Activity implements PlayersStateView {
     }
 
     private void showExitDialog() {
-        new AlertDialog.Builder(myself)
+        new AlertDialog.Builder(this)
                 .setTitle("Dots And Boxes")
                 .setMessage(
                         "Are you sure you want to quit?\nYou will lose your existing game.")
@@ -147,7 +142,7 @@ public class DoubleActivity extends Activity implements PlayersStateView {
     }
 
     private void showRefreshDialog() {
-        new AlertDialog.Builder(myself)
+        new AlertDialog.Builder(this)
                 .setTitle("Dots And Boxes")
                 .setMessage(
                         "Are you sure you want to clean the board?\nYou will lose your existing game.")

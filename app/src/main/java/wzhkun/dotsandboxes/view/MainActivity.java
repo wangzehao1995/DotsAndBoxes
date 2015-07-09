@@ -16,52 +16,51 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		final Intent double_activity=new Intent(this,DoubleActivity.class);
+		final Intent help_activity=new Intent(this,HelpActivity.class);
+		final Intent single_activity=new Intent(this,SingleActivity.class);
+		final Intent sound_activity=new Intent(this,SoundSettingActivity.class);
 
-		final Intent doubleee=new Intent(this,DoubleActivity.class);
-		final Intent helpp=new Intent(this,HelpActivity.class);
-		final Intent singlee=new Intent(this,SingleActivity.class);
-		final Intent sound=new Intent(this,SoundSettingActivity.class);
-		ImageButton single=(ImageButton)findViewById(R.id.imageButton2);
-		ImageButton doublee=(ImageButton)findViewById(R.id.imageButton3);
-		ImageButton help=(ImageButton)findViewById(R.id.imageButton6);
-		ImageButton soundd=(ImageButton)findViewById(R.id.imageButton1);
+		ImageButton singleButton=(ImageButton)findViewById(R.id.imageButton2);
+		ImageButton doubleButton=(ImageButton)findViewById(R.id.imageButton3);
+		ImageButton helpButton=(ImageButton)findViewById(R.id.imageButton6);
+		ImageButton soundButton=(ImageButton)findViewById(R.id.imageButton1);
 		
-		soundd.setOnClickListener(new OnClickListener(){
+		soundButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				startActivity(sound);
-				
+				startActivity(sound_activity);
+
 			}
-			
+
 		});
-		
-		doublee.setOnClickListener(new OnClickListener(){
+		doubleButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				startActivity(doubleee);
-				
+				startActivity(double_activity);
+
 			}
-			
+
 		});
-		help.setOnClickListener(new OnClickListener(){
+		helpButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				startActivity(helpp);
-				
+				startActivity(help_activity);
+
 			}
-			
+
 		});
-		single.setOnClickListener(new OnClickListener(){
+		singleButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				startActivity(singlee);
-				
+				startActivity(single_activity);
+
 			}
-			
+
 		});
 	}
 

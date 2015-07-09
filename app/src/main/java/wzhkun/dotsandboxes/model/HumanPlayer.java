@@ -1,36 +1,29 @@
 package wzhkun.dotsandboxes.model;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-/**
- * Created by wangzehao on 2015/7/6.
- */
-public class HumanPlayer extends Player{
-    private Line[] inputBuffer=new Line[1];
-    private Object lock=new Object();
+public class HumanPlayer extends Player {
+    private final Line[] inputBuffer = new Line[1];
 
     public HumanPlayer(String name) {
         super(name);
     }
 
     public void add(Line line) {
-        synchronized (inputBuffer){
-            inputBuffer[0]=line;
+        synchronized (inputBuffer) {
+            inputBuffer[0] = line;
             inputBuffer.notify();
         }
     }
 
-    private Line getInput(){
-        synchronized (inputBuffer){
-            if(inputBuffer[0]!=null){
-                Line temp=inputBuffer[0];
-                inputBuffer[0]=null;
+    private Line getInput() {
+        synchronized (inputBuffer) {
+            if (inputBuffer[0] != null) {
+                Line temp = inputBuffer[0];
+                inputBuffer[0] = null;
                 return temp;
             }
             try {
                 inputBuffer.wait();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
             return this.getInput();
         }

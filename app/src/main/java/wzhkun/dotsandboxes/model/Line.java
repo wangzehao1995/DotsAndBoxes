@@ -30,9 +30,7 @@ public class Line {
 
         Line line = (Line) o;
 
-        if (row != line.row) return false;
-        if (column != line.column) return false;
-        return direction == line.direction;
+        return row == line.row && column == line.column && direction == line.direction;
 
     }
 

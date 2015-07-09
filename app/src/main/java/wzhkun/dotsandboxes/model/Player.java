@@ -1,8 +1,5 @@
 package wzhkun.dotsandboxes.model;
 
-/**
- * Created by wangzehao on 2015/7/6.
- */
 public abstract class Player {
     public abstract Line move();
     private String name;

@@ -4,12 +4,12 @@
     <file url="file://$PROJECT_DIR$/app" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/model/AIPlayer.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/DoubleActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/GameView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/HelpActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/MainActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/SingleActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/SoundSettingActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/wzhkun/dotsandboxes/view/TwoPlayerActivity.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -242,7 +242,7 @@ public class Game extends Observable {
                 winners.add(players[i]);
         }
 
-        return (Player[]) winners.toArray();
+        return winners.toArray(new Player[0]);
     }
 
 }

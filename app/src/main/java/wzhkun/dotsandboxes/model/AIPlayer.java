@@ -17,13 +17,13 @@ public class AIPlayer extends Player {
     private HashMap<Line, Integer> goodLineType;
 
     private AIPlayer(int difficulty, Game game) {
-        this(null);
-        this.setDifficulty(difficulty);
+        this(null,difficulty);
         this.addToGame(game);
     }
 
-    public AIPlayer(String name) {
+    public AIPlayer(String name,int difficulty) {
         super(name);
+        this.difficulty=difficulty;
         horizontal = new boolean[6][5];
         vertical = new boolean[5][6];
         box = new Box[5][5];
@@ -34,10 +34,6 @@ public class AIPlayer extends Player {
         goodLineValue = new HashMap<>();
         goodLineType = new HashMap<>();
 
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
     }
 
     public Line move() {

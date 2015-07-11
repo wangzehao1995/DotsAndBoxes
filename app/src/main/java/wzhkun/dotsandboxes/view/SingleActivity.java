@@ -11,50 +11,71 @@ import wzhkun.dotsandboxes.model.AIPlayer;
 import wzhkun.dotsandboxes.model.HumanPlayer;
 import wzhkun.dotsandboxes.model.Player;
 
-public class SingleActivity extends DoubleActivity {
-    private AIPlayer computer;
+public class SingleActivity extends TwoPlayerActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initPlayersDisplayView() {
+        super.initPlayersDisplayView();
         TextView player2name = (TextView) findViewById(R.id.player2name);
         player2name.setText("Computer");
         ImageView player2picture = (ImageView) findViewById(R.id.player2picture);
         player2picture.setImageResource(R.mipmap.computer);
-
-        showChooseAIDifficultyDialog();
     }
 
     @Override
     protected Player[] initPlayers() {
-        computer = new AIPlayer("Computer");
+        AIPlayer computer = new AIPlayer("Computer",getAIDifficulty());
         return new Player[]{new HumanPlayer("Player1"), computer};
     }
 
-    private void showChooseAIDifficultyDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Dots And Boxes")
-                .setMessage("Please choose difficulty")
-                .setPositiveButton("Normal",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                computer.setDifficulty(1);
+    private int getAIDifficulty() {
+        final int[] aiDifficulty=new int[]{-1};
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialog.Builder(SingleActivity.this)
+                        .setTitle("Dots And Boxes")
+                        .setMessage("Please choose difficulty")
+                        .setPositiveButton("Normal",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        synchronized (aiDifficulty) {
+                                            aiDifficulty[0] = 1;
+                                            aiDifficulty.notify();
+                                        }
+                                    }
+                                })
+                        .setNeutralButton("Hard", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                synchronized (aiDifficulty) {
+                                    aiDifficulty[0] = 2;
+                                    aiDifficulty.notify();
+                                }
                             }
                         })
-                .setNeutralButton("Hard", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        computer.setDifficulty(2);
-                    }
-                })
-                .setNegativeButton("Ultra",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                computer.setDifficulty(3);
-                            }
-                        }).show();
+                        .setNegativeButton("Ultra",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        synchronized (aiDifficulty) {
+                                            aiDifficulty[0] = 3;
+                                            aiDifficulty.notify();
+                                        }
+                                    }
+                                }).show();
+            }
+        });
+        while(aiDifficulty[0]==-1){
+            synchronized (aiDifficulty){
+                try {
+                    aiDifficulty.wait();
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
+        return aiDifficulty[0];
     }
 
 }

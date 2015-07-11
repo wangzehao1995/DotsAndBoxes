@@ -66,8 +66,7 @@ public class GameView extends View implements Observer {
                 game.start();
             }
         }.start();
-        updatePlayersState();
-        invalidate();
+        postInvalidate();
     }
 
     @Override
@@ -211,10 +210,6 @@ public class GameView extends View implements Observer {
             ((HumanPlayer) game.playerNow()).add(move);
 
         }
-    }
-
-    private void updatePlayersState() {
-
     }
 
     @Override

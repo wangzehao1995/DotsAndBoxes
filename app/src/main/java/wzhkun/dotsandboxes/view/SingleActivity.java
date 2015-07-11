@@ -7,7 +7,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import wzhkun.dotsandboxes.R;
+import wzhkun.dotsandboxes.model.AIHard;
+import wzhkun.dotsandboxes.model.AINormal;
 import wzhkun.dotsandboxes.model.AIPlayer;
+import wzhkun.dotsandboxes.model.AIUltra;
 import wzhkun.dotsandboxes.model.HumanPlayer;
 import wzhkun.dotsandboxes.model.Player;
 
@@ -24,7 +27,18 @@ public class SingleActivity extends TwoPlayerActivity {
 
     @Override
     protected Player[] initPlayers() {
-        AIPlayer computer = new AIPlayer("Computer",getAIDifficulty());
+        int difficulty=getAIDifficulty();
+        String AIName="Computer";
+
+        AIPlayer computer;
+        if(difficulty==1){
+            computer=new AINormal(AIName);
+        }else if(difficulty==2){
+            computer=new AIHard(AIName);
+        }else{
+            computer=new AIUltra(AIName);
+        }
+
         return new Player[]{new HumanPlayer("Player1"), computer};
     }
 

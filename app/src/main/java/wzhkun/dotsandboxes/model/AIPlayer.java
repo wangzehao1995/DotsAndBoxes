@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class AIPlayer extends Player {
-    private int difficulty;
     private boolean[][] horizontal;
     private boolean[][] vertical;
     private Box[][] box;
@@ -17,13 +16,12 @@ public class AIPlayer extends Player {
     private HashMap<Line, Integer> goodLineType;
 
     private AIPlayer(int difficulty, Game game) {
-        this(null,difficulty);
+        this(null);
         this.addToGame(game);
     }
 
-    public AIPlayer(String name,int difficulty) {
+    public AIPlayer(String name) {
         super(name);
-        this.difficulty=difficulty;
         horizontal = new boolean[6][5];
         vertical = new boolean[5][6];
         box = new Box[5][5];
@@ -42,11 +40,11 @@ public class AIPlayer extends Player {
         initialiseGoodLine();
         initialiseBadLine();
 
-        if (difficulty <= 1) {
+        if (getDifficulty() <= 1) {
             return normal();
-        } else if (difficulty == 2) {
+        } else if (getDifficulty() == 2) {
             return hard();
-        } else if (difficulty >= 3) {
+        } else if (getDifficulty() >= 3) {
             return ultra();
         } else
             return random();
@@ -69,11 +67,11 @@ public class AIPlayer extends Player {
         initialiseGoodLine();
         initialiseBadLine();
 
-        if (difficulty == 1) {
+        if (getDifficulty() == 1) {
             return normal();
-        } else if (difficulty == 2) {
+        } else if (getDifficulty() == 2) {
             return hard();
-        } else if (difficulty == 3) {
+        } else if (getDifficulty() == 3) {
             return ultra();
         } else
             return random();
@@ -672,6 +670,10 @@ public class AIPlayer extends Player {
             }
 
         }
+    }
+
+    public int getDifficulty() {
+        return 0;
     }
 
     private static class Box {

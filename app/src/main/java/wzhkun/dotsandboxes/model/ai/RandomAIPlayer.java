@@ -9,9 +9,12 @@ import wzhkun.dotsandboxes.model.Line;
 import wzhkun.dotsandboxes.model.Player;
 
 public class RandomAIPlayer extends Player{
-    protected ArrayList<Line> safeLines;
-    protected ArrayList<Line> goodLines;
-    protected ArrayList<Line> badLines;
+    /**safe line is a line after which is put nobody get a box.*/
+    protected final ArrayList<Line> safeLines;
+    /**good line is a line after which is put current get a box.*/
+    protected final ArrayList<Line> goodLines;
+    /**bad line is a line after which is put the enemy get a box.*/
+    protected final ArrayList<Line> badLines;
 
     RandomAIPlayer(Game game) {
         this("");

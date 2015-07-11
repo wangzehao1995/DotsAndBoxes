@@ -1,7 +1,7 @@
 package wzhkun.dotsandboxes.model;
 
 public abstract class Player {
-    protected String name;
+    protected final String name;
     protected Game game;
 
     public Player(String name) {
@@ -30,5 +30,5 @@ public abstract class Player {
         return name;
     }
 
-    
+
 }

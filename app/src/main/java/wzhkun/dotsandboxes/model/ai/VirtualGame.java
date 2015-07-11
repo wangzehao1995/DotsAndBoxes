@@ -22,7 +22,7 @@ public class VirtualGame extends Game {
     }
 
     int getBadDegree(Line line) {
-        VirtualGame sandbox=this.clone();
+        VirtualGame sandbox=new VirtualGame(this);
         Player playerBeforeMove=sandbox.currentPlayer();
         sandbox.addMove(line);
         Player playerAfterMove=sandbox.currentPlayer();
@@ -36,7 +36,7 @@ public class VirtualGame extends Game {
     }
 
     int getGoodDegree(Line line) {
-        VirtualGame sandbox=this.clone();
+        VirtualGame sandbox=new VirtualGame(this);
         Player playerBeforeMove=sandbox.currentPlayer();
         sandbox.addMove(line);
         Player playerAfterMove=sandbox.currentPlayer();
@@ -50,7 +50,7 @@ public class VirtualGame extends Game {
     }
 
     private int maxBoxesCurrentPlayerCanGet(){
-        VirtualGame sandbox=this.clone();
+        VirtualGame sandbox=new VirtualGame(this);
         //use random ai to avoid recursive call
         RandomAIPlayer ai = new RandomAIPlayer(sandbox);
         Player playerBeforeMove= currentPlayer();
@@ -61,9 +61,5 @@ public class VirtualGame extends Game {
         int endCount = this.getOccupiedBoxCount();
 
         return (endCount - startCount);
-    }
-
-    protected VirtualGame clone(){
-        return new VirtualGame(this);
     }
 }

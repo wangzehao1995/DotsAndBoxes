@@ -5,26 +5,21 @@ import java.util.HashMap;
 import java.util.Vector;
 
 public class AIPlayer extends Player {
-    private boolean[][] horizontal;
-    private boolean[][] vertical;
-    private Box[][] box;
-    private Vector<Line> safeLine;
-    private Vector<Line> goodLine;
-    private Vector<Line> badLine;
-    private HashMap<Line, Integer> goodLineValue;
-    private HashMap<Line, Integer> badLineValue;
-    private HashMap<Line, Integer> goodLineType;
+    protected Vector<Line> safeLine;
+    protected Vector<Line> goodLine;
+    protected Vector<Line> badLine;
+    protected HashMap<Line, Integer> goodLineValue;
+    protected HashMap<Line, Integer> badLineValue;
+    protected HashMap<Line, Integer> goodLineType;
 
-    private AIPlayer(int difficulty, Game game) {
-        this(null);
+    private AIPlayer(Game game) {
+        this("");
         this.addToGame(game);
     }
 
     public AIPlayer(String name) {
         super(name);
-        horizontal = new boolean[6][5];
-        vertical = new boolean[5][6];
-        box = new Box[5][5];
+
         safeLine = new Vector<>();
         goodLine = new Vector<>();
         badLine = new Vector<>();
@@ -35,7 +30,6 @@ public class AIPlayer extends Player {
     }
 
     public Line move() {
-        initialiseBoard();
         initialiseSafeLine();
         initialiseGoodLine();
         initialiseBadLine();
@@ -53,14 +47,14 @@ public class AIPlayer extends Player {
     private Line Line(VBoard vboard) {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                horizontal[i][j] = vboard.horizontal[i][j];
-                vertical[j][i] = vboard.vertical[j][i];
+                getHorizontalLines()[i][j] = vboard.horizontal[i][j];
+                getVerticalLines()[j][i] = vboard.vertical[j][i];
             }
         }
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                box[i][j] = new Box(vertical[i][j], horizontal[i][j],
-                        vertical[i][j + 1], horizontal[i + 1][j]);
+                getBoxes()[i][j] = new Box(getVerticalLines()[i][j], getHorizontalLines()[i][j],
+                        getVerticalLines()[i][j + 1], getHorizontalLines()[i + 1][j]);
             }
         }
         initialiseSafeLine();
@@ -262,9 +256,9 @@ public class AIPlayer extends Player {
         Vector<Line> temp = new Vector<>();
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 5; j++) {
-                if (!horizontal[i][j])
+                if (!getHorizontalLines()[i][j])
                     temp.add(new Line(Direction.HORIZONTAL, i, j));
-                if (!vertical[j][i])
+                if (!getVerticalLines()[j][i])
                     temp.add(new Line(Direction.VERTICAL, j, i));
             }
         return temp.get((int) ((temp.size()) * Math.random()));
@@ -275,46 +269,47 @@ public class AIPlayer extends Player {
         boolean t1 = false;
         boolean t2 = false;
         goodLine.clear();
+        Box[][] boxes=getBoxes();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                if (!horizontal[i][j]) {
+                if (!getHorizontalLines()[i][j]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
-                        if (box[i][j].contain() == 3)
+                        if (boxes[i][j].occupiedLineCount() == 3)
                             goodLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else if (i == 5) {
 
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter == 3)
                             goodLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
                         if (counter == 3)
                             t1 = true;
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter == 3)
                             t2 = true;
@@ -324,43 +319,43 @@ public class AIPlayer extends Player {
                         t2 = false;
                     }
                 }
-                if (!vertical[j][i]) {
+                if (!getVerticalLines()[j][i]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter == 3)
                             goodLine.add(new Line(Direction.VERTICAL, j, i));
                     } else if (i == 5) {
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter == 3)
                             goodLine.add(new Line(Direction.VERTICAL, j, i));
                     } else {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter == 3)
                             t1 = true;
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter == 3)
                             t2 = true;
@@ -376,50 +371,51 @@ public class AIPlayer extends Player {
     }
 
     private void initialiseBadLine() {
-        int counter = 0;
+        int counter;
         boolean t1 = false;
         boolean t2 = false;
         badLine.clear();
+        Box[][] boxes=getBoxes();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                if (!horizontal[i][j]) {
+                if (!getHorizontalLines()[i][j]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
                         if (counter == 2)
                             badLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else if (i == 5) {
 
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter == 2)
                             badLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
                         if (counter == 2)
                             t1 = true;
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter == 2)
                             t2 = true;
@@ -429,43 +425,43 @@ public class AIPlayer extends Player {
                         t2 = false;
                     }
                 }
-                if (!vertical[j][i]) {
+                if (!getVerticalLines()[j][i]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter == 2)
                             badLine.add(new Line(Direction.VERTICAL, j, i));
                     } else if (i == 5) {
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter == 2)
                             badLine.add(new Line(Direction.VERTICAL, j, i));
                     } else {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter == 2)
                             t1 = true;
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter == 2)
                             t2 = true;
@@ -490,51 +486,51 @@ public class AIPlayer extends Player {
     }
 
     private void initialiseSafeLine() {
-        int counter = 0;
+        int counter;
         boolean t1 = false;
         boolean t2 = false;
         safeLine.clear();
-
+        Box[][] boxes=getBoxes();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                if (!horizontal[i][j]) {
+                if (!getHorizontalLines()[i][j]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
                         if (counter < 2)
                             safeLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else if (i == 5) {
 
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter < 2)
                             safeLine.add(new Line(Direction.HORIZONTAL, i, j));
                     } else {
                         counter = 0;
-                        if (box[i][j].left)
+                        if (boxes[i][j].left)
                             counter++;
-                        if (box[i][j].bottom)
+                        if (boxes[i][j].bottom)
                             counter++;
-                        if (box[i][j].right)
+                        if (boxes[i][j].right)
                             counter++;
                         if (counter < 2)
                             t1 = true;
                         counter = 0;
-                        if (box[i - 1][j].left)
+                        if (boxes[i - 1][j].left)
                             counter++;
-                        if (box[i - 1][j].top)
+                        if (boxes[i - 1][j].top)
                             counter++;
-                        if (box[i - 1][j].right)
+                        if (boxes[i - 1][j].right)
                             counter++;
                         if (counter < 2)
                             t2 = true;
@@ -544,43 +540,43 @@ public class AIPlayer extends Player {
                         t2 = false;
                     }
                 }
-                if (!vertical[j][i]) {
+                if (!getVerticalLines()[j][i]) {
                     if (i == 0) {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter < 2)
                             safeLine.add(new Line(Direction.VERTICAL, j, i));
                     } else if (i == 5) {
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter < 2)
                             safeLine.add(new Line(Direction.VERTICAL, j, i));
                     } else {
                         counter = 0;
-                        if (box[j][i].right)
+                        if (boxes[j][i].right)
                             counter++;
-                        if (box[j][i].bottom)
+                        if (boxes[j][i].bottom)
                             counter++;
-                        if (box[j][i].top)
+                        if (boxes[j][i].top)
                             counter++;
                         if (counter < 2)
                             t1 = true;
                         counter = 0;
-                        if (box[j][i - 1].left)
+                        if (boxes[j][i - 1].left)
                             counter++;
-                        if (box[j][i - 1].top)
+                        if (boxes[j][i - 1].top)
                             counter++;
-                        if (box[j][i - 1].bottom)
+                        if (boxes[j][i - 1].bottom)
                             counter++;
                         if (counter < 2)
                             t2 = true;
@@ -594,33 +590,14 @@ public class AIPlayer extends Player {
         }
     }
 
-    private void initialiseBoard() {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                if (getGame().isLineOccupied(Direction.HORIZONTAL, i, j))
-                    horizontal[i][j] = true;
-                else
-                    horizontal[i][j] = false;
-                if (getGame().isLineOccupied(Direction.VERTICAL, j, i))
-                    vertical[j][i] = true;
-                else
-                    vertical[j][i] = false;
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                box[i][j] = new Box(vertical[i][j], horizontal[i][j],
-                        vertical[i][j + 1], horizontal[i + 1][j]);
-            }
-        }
-    }
+
 
     private void initialiseGoodLineValue() {
         if (goodLine.isEmpty())
             return;
         goodLineValue.clear();
         for (Line Line : goodLine) {
-            VBoard vboard = new VBoard(horizontal, vertical);
+            VBoard vboard = new VBoard(getHorizontalLines(), getVerticalLines());
             goodLineValue.put(Line, vboard.getGoodLineValue(Line));
         }
     }
@@ -630,7 +607,7 @@ public class AIPlayer extends Player {
             return;
         badLineValue.clear();
         for (Line Line : badLine) {
-            VBoard vboard = new VBoard(horizontal, vertical);
+            VBoard vboard = new VBoard(getHorizontalLines(), getVerticalLines());
             badLineValue.put(Line, vboard.getBadLineValue(Line));
         }
     }
@@ -639,6 +616,7 @@ public class AIPlayer extends Player {
         if (goodLine.isEmpty())
             return;
         goodLineType.clear();
+        Box[][] boxes=getBoxes();
         for (Line Line : goodLine) {
             if (Line.direction() == Direction.HORIZONTAL) {
                 if (Line.row() == 0)
@@ -647,9 +625,9 @@ public class AIPlayer extends Player {
                     goodLineType.put(Line, 1);
                 else {
                     int counter = 0;
-                    if (box[Line.row()][Line.column()].contain() == 3)
+                    if (boxes[Line.row()][Line.column()].occupiedLineCount() == 3)
                         counter++;
-                    if (box[Line.row() - 1][Line.column()].contain() == 3)
+                    if (boxes[Line.row() - 1][Line.column()].occupiedLineCount() == 3)
                         counter++;
                     goodLineType.put(Line, counter);
                 }
@@ -660,9 +638,9 @@ public class AIPlayer extends Player {
                     goodLineType.put(Line, 1);
                 else {
                     int counter = 0;
-                    if (box[Line.row()][Line.column()].contain() == 3)
+                    if (boxes[Line.row()][Line.column()].occupiedLineCount() == 3)
                         counter++;
-                    if (box[Line.row()][Line.column() - 1].contain() == 3)
+                    if (boxes[Line.row()][Line.column() - 1].occupiedLineCount() == 3)
                         counter++;
                     goodLineType.put(Line, counter);
                 }
@@ -676,12 +654,33 @@ public class AIPlayer extends Player {
         return 0;
     }
 
+    protected Box[][] getBoxes() {
+        Box[][] boxes=new Box[getGame().getHeight()][getGame().getWeigh()];
+        boolean[][] verticalLines=getVerticalLines();
+        boolean[][] horizontalLines=getHorizontalLines();
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    boxes[i][j] = new Box(verticalLines[i][j], horizontalLines[i][j],
+                            verticalLines[i][j + 1], horizontalLines[i + 1][j]);
+                }
+            }
+        return boxes;
+    }
+
+    protected boolean[][] getHorizontalLines() {
+        return getGame().getHorizontalLines();
+    }
+
+    protected boolean[][] getVerticalLines() {
+        return getGame().getVerticalLines();
+    }
+
     private static class Box {
         boolean left;
         boolean top;
         boolean right;
         boolean bottom;
-        boolean ocpd;
+        boolean occupied;
 
         Box(boolean l, boolean t, boolean r, boolean b) {
             this.left = l;
@@ -689,22 +688,22 @@ public class AIPlayer extends Player {
             this.right = r;
             this.bottom = b;
             if (l && t && r && b)
-                this.ocpd = true;
+                this.occupied = true;
             else
-                this.ocpd = false;
+                this.occupied = false;
         }
 
-        int contain() {
-            int counter = 0;
+        int occupiedLineCount() {
+            int count = 0;
             if (this.left)
-                counter++;
+                count++;
             if (this.right)
-                counter++;
+                count++;
             if (this.top)
-                counter++;
+                count++;
             if (this.bottom)
-                counter++;
-            return counter;
+                count++;
+            return count;
         }
 
     }
@@ -735,7 +734,7 @@ public class AIPlayer extends Player {
                 for (int j = 0; j < 5; j++) {
                     box[i][j] = new Box(vertical[i][j], horizontal[i][j],
                             vertical[i][j + 1], horizontal[i + 1][j]);
-                    if (box[i][j].ocpd)
+                    if (box[i][j].occupied)
                         occupied[i][j] = true;
                 }
             }
@@ -830,7 +829,7 @@ public class AIPlayer extends Player {
                 this.horizontal[Line.row()][Line.column()] = true;
             else
                 this.vertical[Line.row()][Line.column()] = true;
-            AIPlayer ai = new AIPlayer(0, getGame());
+            AIPlayer ai = new AIPlayer(getGame());
             ini();
             start = this.getOccupiedNumber();
             keepgoing = true;
@@ -849,7 +848,7 @@ public class AIPlayer extends Player {
                 this.horizontal[Line.row()][Line.column()] = true;
             else
                 this.vertical[Line.row()][Line.column()] = true;
-            AIPlayer ai = new AIPlayer(0, getGame());
+            AIPlayer ai = new AIPlayer(getGame());
             ini();
             start = this.getOccupiedNumber();
             keepgoing = true;
@@ -873,7 +872,7 @@ public class AIPlayer extends Player {
             int Me = 0;
             ini();
             Me = getOccupiedNumber() - ocpdAlready;
-            AIPlayer ai = new AIPlayer(2, getGame());
+            AIPlayer ai = new AIPlayer(getGame());
             int playerNow;
             if (Me == 1)
                 playerNow = 0;

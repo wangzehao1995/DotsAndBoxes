@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import wzhkun.dotsandboxes.Util;
+
 public class Game extends Observable {
     private Player[] players;
     private int playerNowIndex;
@@ -29,6 +31,14 @@ public class Game extends Observable {
 
         addPlayersToGame(players);
         initFirstMover(firstMover, players);
+    }
+
+    public boolean[][] getHorizontalLines() {
+        return Util.deepClone(horizontalLines);
+    }
+
+    public boolean[][] getVerticalLines() {
+        return Util.deepClone(verticalLines);
     }
 
     private void assertPlayerCountRight(Player[] players) {

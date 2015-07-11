@@ -1,8 +1,22 @@
 package wzhkun.dotsandboxes.model;
 
 public abstract class Player {
+    protected String name;
+    protected Game game;
+
+    public Player(String name) {
+        this.name = name;
+    }
+
+    public static int indexIn(Player player, Player... players) {
+        for (int i = 0; i < players.length; i++) {
+            if (player == players[i])
+                return i;
+        }
+        return -1;
+    }
+
     public abstract Line move();
-    private String name;
 
     public Game getGame() {
         return game;
@@ -12,22 +26,8 @@ public abstract class Player {
         this.game = game;
     }
 
-    private Game game;
-
-    public Player(String name){
-        this.name=name;
-    }
-
-    public String getName(){
+    public String getName() {
         return name;
-    }
-
-    public static int indexIn(Player player,Player... players){
-        for(int i=0;i<players.length;i++){
-            if (player==players[i])
-                return i;
-        }
-        return -1;
     }
 
     @Override

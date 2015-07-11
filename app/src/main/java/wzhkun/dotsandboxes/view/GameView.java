@@ -142,7 +142,7 @@ public class GameView extends View implements Observer {
         }
 
         //paint boxes
-        for (int i = 0; i < game.getWeigh(); i++) {
+        for (int i = 0; i < game.getWidth(); i++) {
             for (int j = 0; j < game.getHeight(); j++) {
                 paint.setColor(game.getBoxOccupier(j, i) == null ? Color.TRANSPARENT : playerColors[Player.indexIn(game.getBoxOccupier(j, i), game.getPlayers())]);
                 canvas.drawRect(start + add5 * i + add1 + add2, start

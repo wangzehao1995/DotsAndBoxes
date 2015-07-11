@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import wzhkun.dotsandboxes.R;
-import wzhkun.dotsandboxes.model.HumanPlayer;
 import wzhkun.dotsandboxes.model.Player;
 
 public abstract class TwoPlayerActivity extends Activity implements PlayersStateView {

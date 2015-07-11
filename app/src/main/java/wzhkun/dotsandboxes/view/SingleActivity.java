@@ -1,16 +1,14 @@
 package wzhkun.dotsandboxes.view;
 
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import wzhkun.dotsandboxes.R;
-import wzhkun.dotsandboxes.model.AIHard;
-import wzhkun.dotsandboxes.model.AINormal;
-import wzhkun.dotsandboxes.model.AIPlayer;
-import wzhkun.dotsandboxes.model.AIUltra;
+import wzhkun.dotsandboxes.model.ai.HardAIPlayer;
+import wzhkun.dotsandboxes.model.ai.NormalAIPlayer;
+import wzhkun.dotsandboxes.model.ai.RandomAIPlayer;
 import wzhkun.dotsandboxes.model.HumanPlayer;
 import wzhkun.dotsandboxes.model.Player;
 
@@ -30,13 +28,13 @@ public class SingleActivity extends TwoPlayerActivity {
         int difficulty=getAIDifficulty();
         String AIName="Computer";
 
-        AIPlayer computer;
+        Player computer;
         if(difficulty==1){
-            computer=new AINormal(AIName);
+            computer=new RandomAIPlayer(AIName);
         }else if(difficulty==2){
-            computer=new AIHard(AIName);
+            computer=new NormalAIPlayer(AIName);
         }else{
-            computer=new AIUltra(AIName);
+            computer=new HardAIPlayer(AIName);
         }
 
         return new Player[]{new HumanPlayer("Player1"), computer};

@@ -1,5 +1,8 @@
 package wzhkun.dotsandboxes.model;
 
+import wzhkun.dotsandboxes.model.Line;
+import wzhkun.dotsandboxes.model.Player;
+
 public class HumanPlayer extends Player {
     private final Line[] inputBuffer = new Line[1];
 

@@ -4,41 +4,56 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import wzhkun.dotsandboxes.Util;
-
 public class Game extends Observable {
     private Player[] players;
     private int playerNowIndex;
-    private int weigh;
+    private int width;
     private int height;
     private Player[][] occupied;
     private boolean[][] horizontalLines;
     private boolean[][] verticalLines;
     private Line latestLine;
 
-    public Game(int weigh, int height, Player firstMover, Player... players) {
-        assertGameBoardSizeRight(weigh, height);
+    protected Game(Game game){
+        this.players=game.players;
+        this.playerNowIndex=game.playerNowIndex;
+        this.width=game.width;
+        this.height=game.height;
+        this.occupied=new Player[height][width];
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width;j++){
+                this.occupied[i][j]=game.occupied[i][j];
+            }
+        }
+        this.horizontalLines = new boolean[height + 1][width];
+        for(int i=0;i<height+1;i++){
+            for(int j=0;j<width;j++){
+                this.horizontalLines[i][j]=game.horizontalLines[i][j];
+            }
+        }
+        this.verticalLines = new boolean[height][width + 1];
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width+1;j++){
+                this.verticalLines[i][j]=game.verticalLines[i][j];
+            }
+        }
+    }
+
+    public Game(int width, int height, Player firstMover, Player... players) {
+        assertGameBoardSizeRight(width, height);
         assertPlayersNotNull(players);
         assertPlayerCountRight(players);
 
-        this.weigh = weigh;
+        this.width = width;
         this.height = height;
         this.players = players;
 
-        occupied = new Player[height][weigh];
-        horizontalLines = new boolean[height + 1][weigh];
-        verticalLines = new boolean[height][weigh + 1];
+        occupied = new Player[height][width];
+        horizontalLines = new boolean[height + 1][width];
+        verticalLines = new boolean[height][width + 1];
 
         addPlayersToGame(players);
         initFirstMover(firstMover, players);
-    }
-
-    public boolean[][] getHorizontalLines() {
-        return Util.deepClone(horizontalLines);
-    }
-
-    public boolean[][] getVerticalLines() {
-        return Util.deepClone(verticalLines);
     }
 
     private void assertPlayerCountRight(Player[] players) {
@@ -55,8 +70,8 @@ public class Game extends Observable {
         return players;
     }
 
-    public int getWeigh() {
-        return weigh;
+    public int getWidth() {
+        return width;
     }
 
     public int getHeight() {
@@ -133,8 +148,8 @@ public class Game extends Observable {
 
     public int getPlayerOccupyingBoxCount(Player player) {
         int count = 0;
-        for (int i = 0; i < occupied.length; i++) {
-            for (int j = 0; j < occupied[0].length; j++) {
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
                 if (getBoxOccupier(i, j) == player)
                     count++;
             }
@@ -205,7 +220,7 @@ public class Game extends Observable {
     }
 
     private boolean tryToOccupyRightBox(Line move) {
-        if (move.direction() != Direction.VERTICAL || move.column() >= (weigh))
+        if (move.direction() != Direction.VERTICAL || move.column() >= (width))
             return false;
         if (isLineOccupied(Direction.VERTICAL, move.row(), move.column() + 1)
                 && isLineOccupied(Direction.HORIZONTAL, move.row(), move.column())
@@ -221,10 +236,10 @@ public class Game extends Observable {
         playerNowIndex = (playerNowIndex + 1) % players.length;
     }
 
-    private boolean isGameFinished() {
-        for (Player[] anOccupied : occupied) {
-            for (int j = 0; j < occupied[0].length; j++) {
-                if (anOccupied[j] == null)
+    protected boolean isGameFinished() {
+        for (int i=0;i<getHeight();i++) {
+            for (int j = 0; j < getWidth(); j++) {
+                if (getBoxOccupier(i,j) == null)
                     return false;
             }
         }

@@ -1,6 +1,7 @@
 package wzhkun.dotsandboxes.model.ai;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import wzhkun.dotsandboxes.model.Direction;
 import wzhkun.dotsandboxes.model.Game;
@@ -28,28 +29,10 @@ public class RandomAIPlayer extends Player{
 
     protected Line nextMove() {
         if (goodLines.size() != 0)
-            return goodLines.get((int) ((goodLines.size()) * Math.random()));
+            return getRandomGoodLine();
         if (safeLines.size() != 0)
-            return safeLines.get((int) ((safeLines.size()) * Math.random()));
-
-        ArrayList<Line> unOccupiedLines = new ArrayList<>();
-        for (int i = 0; i < getGame().getHeight(); i++) {
-            for (int j = 0; j < getGame().getWidth()+1; j++) {
-                if (!getGame().isLineOccupied(Direction.VERTICAL, i, j))
-                    unOccupiedLines.add(new Line(Direction.VERTICAL, i, j));
-            }
-        }
-        for (int i = 0; i < getGame().getHeight()+1; i++) {
-            for (int j = 0; j < getGame().getWidth(); j++) {
-                if (!getGame().isLineOccupied(Direction.HORIZONTAL, i, j))
-                    unOccupiedLines.add(new Line(Direction.HORIZONTAL, i, j));
-            }
-        }
-        if(unOccupiedLines.size()==0){
-            System.out.println("hw");
-            initialise();
-        }
-        return unOccupiedLines.get((int) ((unOccupiedLines.size()) * Math.random()));
+            return getRandomSafeLine();
+        return getRandomBadLine();
     }
 
     private void initialise() {
@@ -398,4 +381,20 @@ public class RandomAIPlayer extends Player{
         return getGame().isLineOccupied(Direction.VERTICAL, row, column);
     }
 
+    protected Line getRandomGoodLine(){
+        return getRandomLine(goodLines);
+    }
+
+    protected Line getRandomSafeLine(){
+        return getRandomLine(safeLines);
+    }
+
+    protected Line getRandomBadLine(){
+        return getRandomLine(badLines);
+    }
+
+    private Line getRandomLine(List<Line> list){
+        assert list.size()>0;
+        return list.get((int)(list.size()*Math.random()));
+    }
 }

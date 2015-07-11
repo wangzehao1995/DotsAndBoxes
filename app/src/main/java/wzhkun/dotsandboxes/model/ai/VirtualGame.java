@@ -23,52 +23,44 @@ public class VirtualGame extends Game {
 
     int getBadDegree(Line line) {
         VirtualGame sandbox=this.clone();
-        Player playerBeforeMove=sandbox.playerNow();
+        Player playerBeforeMove=sandbox.currentPlayer();
         sandbox.addMove(line);
-        Player playerAfterMove=sandbox.playerNow();
+        Player playerAfterMove=sandbox.currentPlayer();
 
         boolean notBadMove = playerAfterMove == playerBeforeMove;
         if(notBadMove){
             return 0;
         }
 
-        //use random ai to avoid recursive call
-        RandomAIPlayer ai = new RandomAIPlayer(sandbox);
-
-        int startCount, endCount;
-        startCount = this.getOccupiedBoxCount();
-
-        while (playerAfterMove==sandbox.playerNow()&&!sandbox.isGameFinished()) {
-            sandbox.addMove(ai.move());
-        }
-        endCount = this.getOccupiedBoxCount();
-
-        return (endCount - startCount);
+        return sandbox.maxBoxesCurrentPlayerCanGet();
     }
 
     int getGoodDegree(Line line) {
         VirtualGame sandbox=this.clone();
-        Player playerBeforeMove=sandbox.playerNow();
+        Player playerBeforeMove=sandbox.currentPlayer();
         sandbox.addMove(line);
-        Player playerAfterMove=sandbox.playerNow();
+        Player playerAfterMove=sandbox.currentPlayer();
 
         boolean notGoodMove = playerAfterMove != playerBeforeMove;
         if(notGoodMove){
             return 0;
         }
 
+        return sandbox.maxBoxesCurrentPlayerCanGet() + 1;
+    }
+
+    private int maxBoxesCurrentPlayerCanGet(){
+        VirtualGame sandbox=this.clone();
         //use random ai to avoid recursive call
         RandomAIPlayer ai = new RandomAIPlayer(sandbox);
-
-        int startCount, endCount;
-        startCount = this.getOccupiedBoxCount();
-
-        while (playerAfterMove==sandbox.playerNow()&&!sandbox.isGameFinished()) {
+        Player playerBeforeMove= currentPlayer();
+        int startCount = this.getOccupiedBoxCount();
+        while (playerBeforeMove==sandbox.currentPlayer()&&!sandbox.isGameFinished()) {
             sandbox.addMove(ai.move());
         }
-        endCount = this.getOccupiedBoxCount();
+        int endCount = this.getOccupiedBoxCount();
 
-        return (endCount - startCount + 1);
+        return (endCount - startCount);
     }
 
     protected VirtualGame clone(){

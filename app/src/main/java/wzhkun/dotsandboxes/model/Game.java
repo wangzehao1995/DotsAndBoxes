@@ -6,7 +6,7 @@ import java.util.Observable;
 
 public class Game extends Observable {
     private Player[] players;
-    private int playerNowIndex;
+    private int currentPlayerIndex;
     private int width;
     private int height;
     private Player[][] occupied;
@@ -16,26 +16,20 @@ public class Game extends Observable {
 
     protected Game(Game game){
         this.players=game.players;
-        this.playerNowIndex=game.playerNowIndex;
+        this.currentPlayerIndex =game.currentPlayerIndex;
         this.width=game.width;
         this.height=game.height;
         this.occupied=new Player[height][width];
         for(int i=0;i<height;i++){
-            for(int j=0;j<width;j++){
-                this.occupied[i][j]=game.occupied[i][j];
-            }
+            System.arraycopy(game.occupied[i], 0, this.occupied[i], 0, width);
         }
         this.horizontalLines = new boolean[height + 1][width];
         for(int i=0;i<height+1;i++){
-            for(int j=0;j<width;j++){
-                this.horizontalLines[i][j]=game.horizontalLines[i][j];
-            }
+            System.arraycopy(game.horizontalLines[i], 0, this.horizontalLines[i], 0, width);
         }
         this.verticalLines = new boolean[height][width + 1];
         for(int i=0;i<height;i++){
-            for(int j=0;j<width+1;j++){
-                this.verticalLines[i][j]=game.verticalLines[i][j];
-            }
+            System.arraycopy(game.verticalLines[i], 0, this.verticalLines[i], 0, width + 1);
         }
     }
 
@@ -93,7 +87,7 @@ public class Game extends Observable {
     private void initFirstMover(Player firstMover, Player[] players) {
         for (int i = 0; i < players.length; i++) {
             if (players[i] == firstMover) {
-                playerNowIndex = i;
+                currentPlayerIndex = i;
             }
         }
     }
@@ -106,7 +100,7 @@ public class Game extends Observable {
 
     public void start() {
         while (!isGameFinished()) {
-            addMove(playerNow().move());
+            addMove(currentPlayer().move());
             setChanged();
             notifyObservers();
         }
@@ -124,8 +118,8 @@ public class Game extends Observable {
             toNextPlayer();
     }
 
-    public Player playerNow() {
-        return players[playerNowIndex];
+    public Player currentPlayer() {
+        return players[currentPlayerIndex];
     }
 
     public boolean isLineOccupied(Direction direction, int row, int column) {
@@ -186,7 +180,7 @@ public class Game extends Observable {
         if (isLineOccupied(Direction.HORIZONTAL, move.row() - 1, move.column())
                 && isLineOccupied(Direction.VERTICAL, move.row() - 1, move.column())
                 && isLineOccupied(Direction.VERTICAL, move.row() - 1, move.column() + 1)) {
-            setBoxOccupied(move.row() - 1, move.column(), playerNow());
+            setBoxOccupied(move.row() - 1, move.column(), currentPlayer());
             return true;
         } else {
             return false;
@@ -199,7 +193,7 @@ public class Game extends Observable {
         if (isLineOccupied(Direction.HORIZONTAL, move.row() + 1, move.column())
                 && isLineOccupied(Direction.VERTICAL, move.row(), move.column())
                 && isLineOccupied(Direction.VERTICAL, move.row(), move.column() + 1)) {
-            setBoxOccupied(move.row(), move.column(), playerNow());
+            setBoxOccupied(move.row(), move.column(), currentPlayer());
             return true;
         } else {
             return false;
@@ -212,7 +206,7 @@ public class Game extends Observable {
         if (isLineOccupied(Direction.VERTICAL, move.row(), move.column() - 1)
                 && isLineOccupied(Direction.HORIZONTAL, move.row(), move.column() - 1)
                 && isLineOccupied(Direction.HORIZONTAL, move.row() + 1, move.column() - 1)) {
-            setBoxOccupied(move.row(), move.column() - 1, playerNow());
+            setBoxOccupied(move.row(), move.column() - 1, currentPlayer());
             return true;
         } else {
             return false;
@@ -225,7 +219,7 @@ public class Game extends Observable {
         if (isLineOccupied(Direction.VERTICAL, move.row(), move.column() + 1)
                 && isLineOccupied(Direction.HORIZONTAL, move.row(), move.column())
                 && isLineOccupied(Direction.HORIZONTAL, move.row() + 1, move.column())) {
-            setBoxOccupied(move.row(), move.column(), playerNow());
+            setBoxOccupied(move.row(), move.column(), currentPlayer());
             return true;
         } else {
             return false;
@@ -233,7 +227,7 @@ public class Game extends Observable {
     }
 
     private void toNextPlayer() {
-        playerNowIndex = (playerNowIndex + 1) % players.length;
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     }
 
     protected boolean isGameFinished() {
@@ -267,7 +261,7 @@ public class Game extends Observable {
                 winners.add(players[i]);
         }
 
-        return winners.toArray(new Player[0]);
+        return winners.toArray(new Player[winners.size()]);
     }
 
 }

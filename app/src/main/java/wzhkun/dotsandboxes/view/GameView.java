@@ -89,7 +89,7 @@ public class GameView extends View implements Observer {
         float add6 = GameView.add6 * min;
 
         //paint direction color
-        paint.setColor(playerNowColor());
+        paint.setColor(currentPlayerColor());
         float temp = add2 / 2;
         for (int i = 1; i < 6; i++) {
             canvas.drawLine(temp * i, temp * i, min - temp * (i - 1), temp * i, paint);
@@ -167,7 +167,7 @@ public class GameView extends View implements Observer {
     private void receiveInput(MotionEvent event) {
         if (event.getAction() != MotionEvent.ACTION_DOWN)
             return;
-        if (!(game.playerNow() instanceof HumanPlayer)) {
+        if (!(game.currentPlayer() instanceof HumanPlayer)) {
             return;
         }
         float touchX = event.getX();
@@ -207,14 +207,14 @@ public class GameView extends View implements Observer {
             else
                 direction = Direction.VERTICAL;
             move = new Line(direction, a, b);
-            ((HumanPlayer) game.playerNow()).add(move);
+            ((HumanPlayer) game.currentPlayer()).add(move);
 
         }
     }
 
     @Override
     public void update(Observable observable, Object data) {
-        playersState.setPlayerNow(game.playerNow());
+        playersState.setPlayerNow(game.currentPlayer());
         Map<Player, Integer> player_occupyingBoxCount_map = new HashMap<>();
         for (Player player : game.getPlayers()) {
             player_occupyingBoxCount_map.put(player, game.getPlayerOccupyingBoxCount(player));
@@ -227,8 +227,8 @@ public class GameView extends View implements Observer {
         }
     }
 
-    private int playerNowColor() {
-        int playerIndex = Player.indexIn(game.playerNow(), game.getPlayers());
+    private int currentPlayerColor() {
+        int playerIndex = Player.indexIn(game.currentPlayer(), game.getPlayers());
         return playerIndex == -1 ? Color.BLACK : playerColors[playerIndex];
     }
 }

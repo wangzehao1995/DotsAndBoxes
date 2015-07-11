@@ -29,7 +29,7 @@ public class RandomAIPlayer extends Player{
 
     protected Line nextMove() {
         if (goodLines.size() != 0)
-            return getRandomGoodLine();
+            return getBestGoodLine();
         if (safeLines.size() != 0)
             return getRandomSafeLine();
         return getRandomBadLine();
@@ -381,8 +381,9 @@ public class RandomAIPlayer extends Player{
         return getGame().isLineOccupied(Direction.VERTICAL, row, column);
     }
 
-    protected Line getRandomGoodLine(){
-        return getRandomLine(goodLines);
+    protected Line getBestGoodLine(){
+        //I think all good lines are equal,so every good line is the best line.
+        return goodLines.get(0);
     }
 
     protected Line getRandomSafeLine(){

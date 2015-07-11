@@ -14,25 +14,27 @@ public class NormalAIPlayer extends RandomAIPlayer {
 
     protected Line nextMove() {
         if (goodLines.size() != 0)
-            return getRandomGoodLine();
+            return getBestGoodLine();
         if (safeLines.size() != 0)
             return getRandomSafeLine();
-        else {
-            Line bestBadMove = null;
-            int minValue = getBoxCount() + 1;
-            for (Line Line : badLines) {
-                int badDegree = getBadDegree(Line);
-                if (badDegree < minValue) {
-                    bestBadMove = Line;
-                    minValue = badDegree;
-                }
-            }
-            return bestBadMove;
-        }
+        return getBestBadLine();
+
     }
 
     protected int getBadDegree(Line line) {
         return new VirtualGame(getGame()).getBadDegree(line);
     }
 
+    protected Line getBestBadLine() {
+        Line bestBadMove = null;
+        int minValue = getBoxCount() + 1;
+        for (Line Line : badLines) {
+            int badDegree = getBadDegree(Line);
+            if (badDegree < minValue) {
+                bestBadMove = Line;
+                minValue = badDegree;
+            }
+        }
+        return bestBadMove;
+    }
 }

@@ -14,9 +14,9 @@ public class HardAIPlayer extends NormalAIPlayer {
     protected Line nextMove() {
         if (safeLines.size() != 0) {
             if (goodLines.size() != 0)
-                return goodLines.get((int) ((goodLines.size()) * Math.random()));
+                return getBestGoodLine();
             else
-                return safeLines.get((int) ((safeLines.size()) * Math.random()));
+                return getRandomSafeLine();
         }else {
             if (goodLines.size() != 0) {
                 if (badLines.size() == 0)
